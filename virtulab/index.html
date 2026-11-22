@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="VirtuLab UZ: oʻzbek tilidagi 3D virtual laboratoriya va SI-ustoz.">
 <title>VirtuLab UZ</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2B1A13">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VirtuLab">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
@@ -60,6 +68,11 @@ section{padding-block:clamp(56px,8vw,96px);scroll-margin-top:60px}
 .nav-links a:hover{color:var(--deep-ink);background:rgba(255,255,255,.07)}
 .nav-cta{background:var(--accent);color:var(--accent-ink)!important}
 .nav-cta:hover{background:var(--accent)!important;filter:brightness(1.08)}
+.install{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;font:600 .88rem var(--f-body);color:var(--deep-ink);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);padding:6px 12px;border-radius:8px;cursor:pointer}
+.install:hover{background:rgba(255,255,255,.18)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;width:min(440px,calc(100% - 32px));background:var(--deep);color:var(--deep-ink);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:14px 44px 14px 16px;font-size:.92rem;box-shadow:0 14px 40px rgba(0,0,0,.3)}
+.toast button{position:absolute;top:8px;right:8px;width:30px;height:30px;border:0;border-radius:8px;background:transparent;color:var(--deep-ink);font-size:1.2rem;cursor:pointer}
+.offline{display:inline-block;margin-left:8px;font-size:.75rem;font-weight:600;background:#5A3A24;color:#FFE2D3;padding:2px 8px;border-radius:999px;vertical-align:middle}
 
 /* hero */
 .hero{background:var(--deep);color:var(--deep-ink);position:relative;overflow:hidden;padding-block:clamp(56px,9vw,104px)}
@@ -269,6 +282,10 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
       <a href="#jamoa">Jamoa</a>
       <a class="nav-cta" href="#sinov">Sinab koʻrish</a>
     </div>
+    <button class="install" id="btnInstall" type="button" hidden>
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Oʻrnatish
+    </button>
   </div>
 </nav>
 
@@ -765,6 +782,35 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
   }
 
   intro(); showTask(); render(); place();
+
+  // --- Ilova (PWA): oʻrnatish va oflayn rejim ---
+  const btnI = $("btnInstall");
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  let deferred = null;
+  function toast(html){
+    const old = document.querySelector(".toast"); if (old) old.remove();
+    const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role","status");
+    t.innerHTML = html + '<button type="button" aria-label="Yopish">×</button>';
+    t.querySelector("button").onclick = () => t.remove();
+    document.body.appendChild(t);
+  }
+  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; btnI.hidden = false; });
+  window.addEventListener("appinstalled", () => { btnI.hidden = true; deferred = null; toast("✅ VirtuLab UZ oʻrnatildi. Uni bosh ekrandan ochishingiz mumkin."); });
+  if (isIOS && !standalone) btnI.hidden = false;
+  btnI.addEventListener("click", async () => {
+    if (deferred){ deferred.prompt(); await deferred.userChoice.catch(()=>{}); deferred = null; btnI.hidden = true; return; }
+    toast("<b>iPhone/iPad'ga oʻrnatish:</b> Safari'da pastdagi <b>Ulashish</b> tugmasini bosing, soʻng <b>“Bosh ekranga qoʻshish”</b> ni tanlang.");
+  });
+  function netState(){
+    const b = document.querySelector(".brand"); let tag = b.querySelector(".offline");
+    if (!navigator.onLine && !tag){ tag = document.createElement("span"); tag.className = "offline"; tag.textContent = "oflayn"; b.appendChild(tag); }
+    if (navigator.onLine && tag) tag.remove();
+  }
+  addEventListener("online", netState); addEventListener("offline", netState); netState();
+  if ("serviceWorker" in navigator && location.protocol !== "file:"){
+    addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(()=>{}));
+  }
   if (!reduce) requestAnimationFrame(tick);
 })();
 </script>
