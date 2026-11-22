@@ -1,5 +1,5 @@
 // VirtuLab UZ: oflayn ishlash uchun service worker.
-const VERSION = "virtulab-v1";
+const VERSION = "virtulab-v2";
 const CORE = ["./", "./index.html", "./manifest.webmanifest",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/maskable-512.png", "./icons/apple-touch-icon.png"];
 
