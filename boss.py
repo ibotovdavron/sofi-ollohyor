@@ -28,8 +28,8 @@ except Exception:
 # BOSS.PY — O'QUVCHI BOTI
 # =========================================================
 
-# O'QUVCHI BOT tokeni.
-BOT_TOKEN = "8972189009:AAFPKtRJbXeUduUsUn_oC1EQWQguu_Zl8EM"
+# O'quvchi bot tokeni .env faylidagi STUDENT_BOT_TOKEN ga yoziladi.
+from site_config import STUDENT_BOT_TOKEN as BOT_TOKEN  # token .env faylidan olinadi
 
 # ADMIN BOT bilan BIR XIL DATABASE.
 BASE_DIR = Path(__file__).resolve().parent

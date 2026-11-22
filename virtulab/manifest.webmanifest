@@ -1,0 +1,22 @@
+{
+  "name": "VirtuLab UZ",
+  "short_name": "VirtuLab",
+  "description": "Oʻzbek tilidagi virtual laboratoriya va SI-ustoz",
+  "lang": "uz",
+  "id": "./",
+  "start_url": "./?source=app",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#2B1A13",
+  "theme_color": "#2B1A13",
+  "categories": ["education"],
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "Om qonuni tajribasi", "short_name": "Tajriba", "url": "./?source=app#sinov", "icons": [{"src": "icons/icon-192.png", "sizes": "192x192"}]}
+  ]
+}

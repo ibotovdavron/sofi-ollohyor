@@ -43,8 +43,8 @@ except ImportError:
 # ADMIN BOT
 # =========================================================
 
-# BotFather'dan YANGI admin bot tokenini kiriting.
-BOT_TOKEN = "7914377374:AAHeZX9lq8hZQ_M1CgIulT9WltALKz7MzRE"
+# Admin bot tokeni .env faylidagi ADMIN_BOT_TOKEN ga yoziladi.
+from site_config import ADMIN_BOT_TOKEN as BOT_TOKEN  # token .env faylidan olinadi
 
 # O'z Telegram ID'ingizni yozing.
 ADMIN_IDS = {5319789884}

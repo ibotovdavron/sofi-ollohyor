@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="VirtuLab UZ: oʻzbek tilidagi 3D virtual laboratoriya va SI-ustoz.">
+<title>VirtuLab UZ</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2B1A13">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VirtuLab">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: dark laboratory hero, then light sections on a 1120px column; the live Ohm's-law bench is the centrepiece. */
+:root{
+  --bg:#F3F1EC; --surface:#FCFBF8; --ink:#201B18; --muted:#5E554E; --line:#E2DDD5;
+  --accent:#C4410E; --accent-ink:#FFFFFF; --accent-soft:#FBE4D7; --accent-text:#B23A0C;
+  --deep:#2B1A13; --deep-2:#3A2820; --deep-ink:#F6EFE9; --deep-muted:#CDBFB4; --glow:#F7A35C;
+  --ok:#2F7D4F; --warn:#B4231B;
+  --f-display:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:18px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17110E; --surface:#221915; --ink:#F2EBE5; --muted:#B4A69B; --line:#3A2D26;
+  --accent:#E8622A; --accent-ink:#1A0E08; --accent-soft:#3B2219; --accent-text:#FF8E5C;
+  --deep:#0F0A08; --deep-2:#22170F; --deep-ink:#F6EFE9; --deep-muted:#C2B3A7; --glow:#F7A35C;
+  --ok:#5BC28A; --warn:#FF6B5E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17110E; --surface:#221915; --ink:#F2EBE5; --muted:#B4A69B; --line:#3A2D26;
+  --accent:#E8622A; --accent-ink:#1A0E08; --accent-soft:#3B2219; --accent-text:#FF8E5C;
+  --deep:#0F0A08; --deep-2:#22170F; --deep-ink:#F6EFE9; --deep-muted:#C2B3A7; --glow:#F7A35C;
+  --ok:#5BC28A; --warn:#FF6B5E; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--deep)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.12;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:clamp(1.75rem,3.6vw,2.5rem);font-weight:700}
+h3{font-size:1.15rem;font-weight:600}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.eyebrow{font-family:var(--f-display);font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text)}
+.lead{font-size:1.125rem;color:var(--muted);max-width:62ch}
+section{padding-block:clamp(56px,8vw,96px);scroll-margin-top:60px}
+.sec-head{display:grid;gap:12px;margin-bottom:36px}
+.num{font-variant-numeric:tabular-nums}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--deep) 92%,transparent);backdrop-filter:blur(10px);color:var(--deep-ink);border-bottom:1px solid rgba(255,255,255,.08)}
+.nav .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.brand{font-family:var(--f-display);font-weight:700;font-size:1.15rem;text-decoration:none;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.brand-mark{width:26px;height:26px}
+.nav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{text-decoration:none;font-size:.9rem;color:var(--deep-muted);padding:6px 10px;border-radius:8px;white-space:nowrap}
+.nav-links a:hover{color:var(--deep-ink);background:rgba(255,255,255,.07)}
+.nav-cta{background:var(--accent);color:var(--accent-ink)!important}
+.nav-cta:hover{background:var(--accent)!important;filter:brightness(1.08)}
+.install{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;font:600 .88rem var(--f-body);color:var(--deep-ink);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);padding:6px 12px;border-radius:8px;cursor:pointer}
+.install:hover{background:rgba(255,255,255,.18)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;width:min(440px,calc(100% - 32px));background:var(--deep);color:var(--deep-ink);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:14px 44px 14px 16px;font-size:.92rem;box-shadow:0 14px 40px rgba(0,0,0,.3)}
+.toast button{position:absolute;top:8px;right:8px;width:30px;height:30px;border:0;border-radius:8px;background:transparent;color:var(--deep-ink);font-size:1.2rem;cursor:pointer}
+.offline{display:inline-block;margin-left:8px;font-size:.75rem;font-weight:600;background:#5A3A24;color:#FFE2D3;padding:2px 8px;border-radius:999px;vertical-align:middle}
+
+/* hero */
+.hero{background:var(--deep);color:var(--deep-ink);position:relative;overflow:hidden;padding-block:clamp(56px,9vw,104px)}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.hero::before{width:min(620px,90vw);aspect-ratio:1;right:-12%;top:-30%;background:#6A2A11;opacity:.85}
+.hero::after{width:min(260px,45vw);aspect-ratio:1;right:14%;bottom:-18%;background:#8A4A26;opacity:.55}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:48px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-weight:600;font-size:.85rem;padding:6px 14px;border-radius:999px}
+.hero h1{font-size:clamp(3rem,9vw,6rem);font-weight:700;letter-spacing:-.03em;margin-top:28px}
+.hero .lead{color:var(--deep-muted);margin-top:18px;font-size:clamp(1.05rem,1.8vw,1.3rem)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 1rem var(--f-body);padding:13px 22px;border-radius:12px;text-decoration:none;border:0;cursor:pointer;transition:transform .15s,filter .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-ghost{background:rgba(255,255,255,.08);color:var(--deep-ink);border:1px solid rgba(255,255,255,.18)}
+.byline{margin-top:44px;color:var(--deep-muted);font-size:.95rem}
+.byline b{color:var(--deep-ink);font-weight:600}
+
+.phone{background:#1C120D;border-radius:34px;padding:12px;box-shadow:0 30px 60px rgba(0,0,0,.35);max-width:320px;margin-left:auto;width:100%}
+.phone-in{background:#FBF8F4;color:#201B18;border-radius:24px;padding:18px 16px 20px;display:grid;gap:10px}
+.phone-top{font:700 .9rem var(--f-display);border-bottom:1px solid #E5DED6;padding-bottom:10px}
+.bub{padding:10px 13px;border-radius:14px;font-size:.88rem;line-height:1.45;max-width:88%}
+.bub.sys{background:#FBE4D7}
+.bub.me{background:#C4410E;color:#fff;justify-self:end}
+.mono{font-family:var(--f-mono);font-size:.85em}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px 24px;display:grid;gap:8px;align-content:start}
+.stat-big{font:700 clamp(2.2rem,4.5vw,3rem)/1 var(--f-display);color:var(--accent-text);font-variant-numeric:tabular-nums}
+.stat-big small{font-size:.5em;font-weight:600;margin-left:4px}
+.stat p{color:var(--muted);font-size:.95rem}
+.rank{display:flex;align-items:center;gap:10px;margin-top:6px}
+.rank-bar{flex:1;height:6px;background:var(--line);border-radius:3px;position:relative;overflow:hidden}
+.rank-bar i{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:3px}
+.rank span{font-size:.8rem;color:var(--muted);white-space:nowrap}
+.tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.tag{background:var(--accent-soft);color:var(--ink);font-weight:600;font-size:.95rem;padding:10px 16px;border-radius:12px}
+.problem-text{font-size:1.15rem;margin-top:32px;max-width:70ch}
+.source{margin-top:22px;font-size:.82rem;color:var(--muted)}
+
+/* solution band */
+.band{background:var(--accent);color:#fff}
+.band .eyebrow{color:#FFE2D3}
+.band .lead{color:#FFE9DE}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{background:var(--surface);color:var(--ink);border-radius:var(--r);padding:28px 24px;display:grid;gap:10px;align-content:start}
+.card p{color:var(--muted);font-size:.97rem}
+.card svg{width:40px;height:40px;color:var(--accent-text)}
+
+/* demo */
+.demo{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:22px;align-items:stretch}
+.bench{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:18px}
+.bench-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.bench-head h3{font-size:1rem}
+.bench-head span{font-size:.82rem;color:var(--muted)}
+.circuit{width:100%;height:auto;display:block;background:var(--bg);border-radius:14px}
+.readouts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ro{background:var(--bg);border-radius:12px;padding:12px 14px}
+.ro label{display:block;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.ro output{font:700 1.6rem var(--f-mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.ro.hot output{color:var(--accent-text)}
+.ro.danger output{color:var(--warn)}
+.controls{display:grid;gap:14px}
+.ctl{display:grid;grid-template-columns:120px minmax(0,1fr) 56px;gap:12px;align-items:center}
+.ctl label{font-weight:600;font-size:.95rem}
+.ctl .val{font:600 .95rem var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent);height:28px}
+.formula{font-family:var(--f-mono);font-size:.95rem;color:var(--muted);text-align:center;padding:10px;border:1px dashed var(--line);border-radius:12px}
+.formula b{color:var(--ink)}
+.bench-actions{display:flex;flex-wrap:wrap;gap:10px}
+.btn-sm{font-size:.9rem;padding:9px 14px;border-radius:10px}
+.btn-line{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn-line:hover{border-color:var(--accent)}
+
+.tutor{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;min-height:460px;overflow:hidden}
+.tutor-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font:700 .9rem var(--f-display);flex-shrink:0}
+.tutor-head b{display:block;font-family:var(--f-display)}
+.tutor-head small{color:var(--muted);font-size:.8rem}
+.task{margin:14px 18px 0;padding:12px 14px;border-radius:12px;background:var(--accent-soft);font-size:.92rem;display:flex;gap:10px;align-items:flex-start}
+.task b{font-family:var(--f-display)}
+.task.done{background:color-mix(in srgb,var(--ok) 16%,var(--surface))}
+.chat{flex:1;padding:14px 18px 18px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;max-height:420px}
+.msg{padding:10px 13px;border-radius:14px;font-size:.92rem;line-height:1.5;max-width:92%;background:var(--bg);animation:pop .25s ease-out}
+.msg.me{background:var(--accent);color:var(--accent-ink);align-self:flex-end}
+.msg.warn{background:color-mix(in srgb,var(--warn) 14%,var(--surface));border-left:3px solid var(--warn)}
+.msg.ok{background:color-mix(in srgb,var(--ok) 14%,var(--surface));border-left:3px solid var(--ok)}
+@keyframes pop{from{transform:translateY(4px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.msg{animation:none}}
+.demo-note{margin-top:14px;font-size:.85rem;color:var(--muted)}
+
+/* how it works */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;counter-reset:s}
+.step{position:relative;display:grid;gap:10px;align-content:start;padding-top:22px;border-top:3px solid var(--accent)}
+.step-n{font:700 .9rem var(--f-mono);color:var(--accent-text)}
+.step p{color:var(--muted);font-size:.95rem}
+.chip{display:inline-block;margin-top:6px;background:var(--accent-soft);font-weight:600;font-size:.82rem;padding:6px 10px;border-radius:8px;justify-self:start}
+
+/* innovation */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.feat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px;display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px}
+.feat svg{width:44px;height:44px;color:var(--accent-text)}
+.feat p{color:var(--muted);margin-top:6px;font-size:.97rem}
+
+/* table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{width:100%;border-collapse:collapse;min-width:720px;font-size:.95rem}
+th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font-family:var(--f-display);font-size:.85rem;font-weight:600;color:var(--muted);background:var(--bg)}
+tbody tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600}
+.us{background:var(--accent-soft)}
+thead th.us{color:var(--accent-text)}
+td.us{font-weight:600}
+.yes::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:8px;vertical-align:middle}
+.no::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--warn);margin-right:8px;vertical-align:middle}
+.mid::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#C99A2E;margin-right:8px;vertical-align:middle}
+.conclusion{margin-top:20px;color:var(--muted);max-width:70ch}
+
+/* finance */
+.stats4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.fin{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;margin-top:18px}
+.fin table{min-width:420px}
+.fin td.n,.fin th.n{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--f-mono);font-size:.9rem}
+.neg{color:var(--warn)}
+.pos{color:var(--ok)}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.chart svg{width:100%;height:auto;display:block}
+.chart text{font-family:var(--f-body);fill:var(--muted);font-size:11px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.assume{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;margin-top:18px}
+.assume ul{margin:10px 0 0;padding-left:18px;color:var(--muted);display:grid;gap:4px;columns:2;column-gap:32px}
+.assume li{break-inside:avoid}
+
+/* roadmap */
+.road{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;position:relative}
+.phase{display:grid;gap:8px;align-content:start;padding-top:18px;border-top:4px solid var(--line);position:relative}
+.phase::before{content:"";position:absolute;top:-10px;left:0;width:16px;height:16px;border-radius:50%;background:var(--surface);border:4px solid var(--accent)}
+.phase.now{border-top-color:var(--accent)}
+.phase.now::before{background:var(--accent)}
+.phase .when{font:700 .82rem var(--f-mono);color:var(--accent-text);letter-spacing:.04em}
+.phase p{color:var(--muted);font-size:.95rem}
+.partners{margin-top:40px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 24px;display:flex;gap:20px;flex-wrap:wrap;align-items:baseline}
+.partners p{color:var(--muted);flex:1;min-width:240px}
+
+/* results */
+.stats3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+
+/* team */
+.team{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+.person{display:grid;grid-template-columns:48px minmax(0,1fr);gap:14px;align-items:center;padding-block:14px;border-bottom:1px solid var(--line)}
+.person:last-child{border-bottom:0}
+.ini{width:48px;height:48px;border-radius:50%;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;font:700 1rem var(--f-display)}
+.person b{display:block}
+.person span{color:var(--muted);font-size:.93rem}
+.risk{border-left:3px solid var(--accent);padding:4px 0 4px 16px;margin-top:16px}
+.risk b{display:block}
+.risk span{color:var(--muted);font-size:.95rem}
+
+/* closing */
+.closing{background:var(--deep);color:var(--deep-ink);position:relative;overflow:hidden}
+.closing::after{content:"";position:absolute;width:300px;aspect-ratio:1;border-radius:50%;right:-80px;bottom:-120px;background:#5A3A24;opacity:.7}
+.closing .wrap{position:relative;z-index:1}
+.closing h2{font-size:clamp(2.2rem,6vw,4rem)}
+.closing .eyebrow{color:var(--glow)}
+.close3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:36px}
+.close3 div{background:var(--deep-2);border-radius:var(--r);padding:22px}
+.close3 b{font:700 .8rem var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:var(--glow)}
+.close3 p{color:var(--deep-muted);margin-top:8px}
+.foot{margin-top:56px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--deep-muted);font-size:.9rem}
+
+@media (max-width:900px){
+  .hero .wrap,.demo,.fin,.team{grid-template-columns:minmax(0,1fr)}
+  .phone{margin:0 auto}
+  .steps,.road,.stats4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats,.trio,.stats3,.close3{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:620px){
+  .grid2,.steps,.road,.stats4{grid-template-columns:minmax(0,1fr)}
+  .ctl{grid-template-columns:minmax(0,1fr) 56px}
+  .ctl input{grid-column:1/-1;grid-row:2}
+  .readouts .ro output{font-size:1.25rem}
+  .assume ul{columns:1}
+  .nav-links a:not(.nav-cta){display:none}
+}
+body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Asosiy menyu">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <svg class="brand-mark" viewBox="0 0 26 26" aria-hidden="true"><path d="M9 3h8M10.5 3v7L4.5 21a2 2 0 0 0 1.8 3h13.4a2 2 0 0 0 1.8-3L15.5 10V3" fill="none" stroke="#F7A35C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 17h11l2.2 4.2a1 1 0 0 1-.9 1.4H6.2a1 1 0 0 1-.9-1.4z" fill="#E8622A"/></svg>
+      VirtuLab UZ
+    </a>
+    <div class="nav-links">
+      <a href="#muammo">Muammo</a>
+      <a href="#yechim">Yechim</a>
+      <a href="#texnologiya">Texnologiya</a>
+      <a href="#taqqoslash">Taqqoslash</a>
+      <a href="#moliya">Moliya</a>
+      <a href="#reja">Reja</a>
+      <a href="#jamoa">Jamoa</a>
+      <a class="nav-cta" href="#sinov">Sinab koʻrish</a>
+    </div>
+    <button class="install" id="btnInstall" type="button" hidden>
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Oʻrnatish
+    </button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zm0 0a2 2 0 0 0 2 2h13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>
+        Ta’lim startapi
+      </span>
+      <h1>VirtuLab UZ</h1>
+      <p class="lead">Har bir oʻquvchining choʻntagida laboratoriya: oʻzbek tilidagi 3D virtual tajribalar va SI-ustoz.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#sinov">Om qonunini sinab koʻring
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#muammo">Loyiha haqida</a>
+      </div>
+      <p class="byline">Muallif: <b>Hayrullayeva Joziba</b>, Oltinsoy tumani 68-umumta’lim maktabi oʻquvchisi</p>
+    </div>
+    <div class="phone" aria-label="Ilova interfeysi maketi">
+      <div class="phone-in">
+        <div class="phone-top">VirtuLab · Fizika, 8-sinf</div>
+        <div class="bub sys">Tajriba: <b>Om qonuni</b><br><span class="mono">U = 6 V, R = 3 Ω → I = 2 A</span></div>
+        <div class="bub me">Qarshilikni 6 Ω qildim</div>
+        <div class="bub sys"><b>Ustoz:</b> Toʻgʻri! Tok kuchi 1 A ga tushdi. Nega? Qarshilik 2 baravar oshsa, tok 2 baravar kamayadi.</div>
+        <div class="bub me">Keyingi topshiriq</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="muammo">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Muammo</span>
+      <h2>Tabiiy fanlar: nazariya koʻp, tajriba kam</h2>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-big num">396<small>ball</small></div>
+        <p>TIMSS 2023: 8-sinf tabiiy fanlar. 44 davlat ichida 39-oʻrin.</p>
+        <div class="rank"><div class="rank-bar"><i style="width:88.6%"></i></div><span class="num">39 / 44</span></div>
+      </div>
+      <div class="stat">
+        <div class="stat-big num">412<small>ball</small></div>
+        <p>TIMSS 2023: 4-sinf tabiiy fanlar. 58 davlat ichida 54-oʻrin.</p>
+        <div class="rank"><div class="rank-bar"><i style="width:93.1%"></i></div><span class="num">54 / 58</span></div>
+      </div>
+      <div class="stat">
+        <div class="stat-big num">355<small>ball</small></div>
+        <p>PISA 2022: tabiiy fanlar savodxonligi. 81 davlat ichida 80-oʻrin.</p>
+        <div class="rank"><div class="rank-bar"><i style="width:98.8%"></i></div><span class="num">80 / 81</span></div>
+      </div>
+    </div>
+    <p class="problem-text">Oʻquvchi formulani yodlaydi, lekin tajribani <b>oʻz qoʻli bilan</b> kamdan-kam qiladi. Laboratoriyalar zamonaviy jihozlar bilan ta’minlanmagani rasmiy hujjatlarda ham qayd etilgan.</p>
+    <div class="tags">
+      <span class="tag">Jihoz va reaktivlar qimmat, eskirgan</span>
+      <span class="tag">Xavfsizlik sababli tajribalar kam</span>
+      <span class="tag">Oʻzbek tilida interaktiv resurs kam</span>
+    </div>
+    <p class="source">Manbalar: Maktabgacha va maktab ta’limi vazirligi (TIMSS 2023), kun.uz (PISA 2022), lex.uz. Chiziq reytingdagi oʻrinni koʻrsatadi: qanchalik uzun boʻlsa, oʻrin shunchalik pastda.</p>
+  </div>
+</section>
+
+<section class="band" id="yechim">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Yechim</span>
+      <h2>Koʻr, sinab koʻr, tushun</h2>
+      <p class="lead">VirtuLab UZ darslik mavzulariga mos 3D virtual laboratoriya, SI-ustoz va oʻqituvchi panelidan iborat ta’lim platformasi.</p>
+    </div>
+    <div class="trio">
+      <div class="card">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 34 12v16L20 36 6 28V12z M6 12l14 8 14-8 M20 20v16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+        <h3>3D virtual laboratoriya</h3>
+        <p>Fizika, kimyo, biologiya tajribalari: asboblarni yigʻish, oʻlchash, natijani kuzatish.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M7 9h26v18H18l-7 6v-6H7z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="14" cy="18" r="1.8" fill="currentColor"/><circle cx="20" cy="18" r="1.8" fill="currentColor"/><circle cx="26" cy="18" r="1.8" fill="currentColor"/></svg>
+        <h3>SI-ustoz</h3>
+        <p>Xatoni tushuntiradi, savolga oʻzbekcha javob beradi, oʻquvchi darajasiga moslashadi.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 34h28M10 34V22M17 34V14M24 34V18M31 34V8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+        <h3>Oʻqituvchi paneli</h3>
+        <p>Topshiriq berish, natijalarni koʻrish, sinf boʻyicha tahlil va hisobot.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sinov">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Prototip · Fizika, 8-sinf</span>
+      <h2>Om qonunini oʻzingiz sinab koʻring</h2>
+      <p class="lead">Kuchlanish va qarshilikni oʻzgartiring. Zanjirdagi tok, lampochka yorugʻligi va ustozning izohi darhol yangilanadi.</p>
+    </div>
+    <div class="demo">
+      <div class="bench">
+        <div class="bench-head"><h3>Elektr zanjiri</h3><span>Batareya · rezistor · lampochka · ampermetr</span></div>
+        <svg class="circuit" id="circuit" viewBox="0 0 560 300" role="img" aria-label="Elektr zanjiri sxemasi">
+          <path id="wire" d="M90 60 H470 V240 H90 Z" fill="none" stroke="var(--muted)" stroke-width="4" stroke-linejoin="round"/>
+          <g id="electrons"></g>
+          <!-- battery -->
+          <rect x="62" y="118" width="56" height="64" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
+          <line x1="76" y1="138" x2="104" y2="138" stroke="var(--ink)" stroke-width="4"/>
+          <line x1="82" y1="150" x2="98" y2="150" stroke="var(--ink)" stroke-width="4"/>
+          <line x1="76" y1="162" x2="104" y2="162" stroke="var(--ink)" stroke-width="4"/>
+          <text x="128" y="146" fill="var(--ink)" font-family="var(--f-mono)" font-size="15" font-weight="600" id="lblU">6 V</text>
+          <text x="128" y="164" fill="var(--muted)" font-family="var(--f-body)" font-size="11">batareya</text>
+          <!-- resistor -->
+          <rect x="230" y="44" width="100" height="32" rx="5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
+          <path id="zig" d="M240 60 l8-10 l12 20 l12-20 l12 20 l12-20 l12 20 l6-10" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>
+          <text x="280" y="102" text-anchor="middle" fill="var(--ink)" font-family="var(--f-mono)" font-size="15" font-weight="600" id="lblR">3 Ω</text>
+          <!-- lamp -->
+          <circle id="halo" cx="470" cy="150" r="60" fill="var(--glow)" opacity=".35"/>
+          <circle cx="470" cy="150" r="26" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
+          <circle id="bulb" cx="470" cy="150" r="22" fill="var(--glow)" opacity=".6"/>
+          <path id="filament" d="M455 135 L485 165 M485 135 L455 165" stroke="var(--ink)" stroke-width="2.5"/>
+          <text x="420" y="196" text-anchor="end" fill="var(--muted)" font-family="var(--f-body)" font-size="11" id="lblLamp">lampochka</text>
+          <!-- ammeter -->
+          <circle cx="280" cy="240" r="30" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
+          <text x="280" y="236" text-anchor="middle" fill="var(--muted)" font-family="var(--f-display)" font-size="12" font-weight="700">A</text>
+          <text x="280" y="254" text-anchor="middle" fill="var(--ink)" font-family="var(--f-mono)" font-size="14" font-weight="600" id="lblI">2 A</text>
+        </svg>
+        <div class="readouts">
+          <div class="ro"><label>Kuchlanish</label><output id="oU" class="num">6 V</output></div>
+          <div class="ro"><label>Qarshilik</label><output id="oR" class="num">3 Ω</output></div>
+          <div class="ro hot" id="roI"><label>Tok kuchi</label><output id="oI" class="num">2 A</output></div>
+        </div>
+        <div class="controls">
+          <div class="ctl">
+            <label for="sU">Kuchlanish, U</label>
+            <input type="range" id="sU" min="1" max="12" step="1" value="6">
+            <span class="val" id="vU">6 V</span>
+          </div>
+          <div class="ctl">
+            <label for="sR">Qarshilik, R</label>
+            <input type="range" id="sR" min="1" max="20" step="1" value="3">
+            <span class="val" id="vR">3 Ω</span>
+          </div>
+        </div>
+        <div class="formula" id="formula"><b>I = U / R</b> = 6 V / 3 Ω = <b>2 A</b></div>
+        <div class="bench-actions">
+          <button class="btn btn-sm btn-line" id="btnShort" type="button">Xavfli tajriba: qarshilikni 1 Ω ga tushirish</button>
+          <button class="btn btn-sm btn-line" id="btnReset" type="button">Boshidan boshlash</button>
+        </div>
+      </div>
+      <div class="tutor" aria-live="polite">
+        <div class="tutor-head">
+          <div class="avatar">SI</div>
+          <div><b>SI-ustoz</b><small>Darslik bazasi asosida, oʻzbek tilida</small></div>
+        </div>
+        <div class="task" id="task"><span>🎯</span><div><b>Topshiriq 1/4.</b> <span id="taskText"></span></div></div>
+        <div class="chat" id="chat"></div>
+      </div>
+    </div>
+    <p class="demo-note">Bu namoyish varianti: ustoz javoblari oldindan yozilgan qoidalar asosida chiqadi. Toʻliq ilovada javoblarni darslik bazasiga tayangan til modeli beradi.</p>
+  </div>
+</section>
+
+<section id="texnologiya" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Qanday ishlaydi</span>
+      <h2>Texnik yechim toʻrt qismdan iborat</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="step-n">01</span><h3>3D muhit</h3><p>Unity asosida: Android va brauzerda, 2 GB xotirali telefonda ham ishlaydi.</p><span class="chip">Unity 3D (Android + WebGL)</span></div>
+      <div class="step"><span class="step-n">02</span><h3>Simulyatsiya</h3><p>Haqiqiy formulalar: Om qonuni, optika, reaksiya tenglamalari, natija real vaqtda.</p><span class="chip">Internetsiz rejim</span></div>
+      <div class="step"><span class="step-n">03</span><h3>SI-ustoz</h3><p>Til modeli va darsliklar bazasi (RAG): javob faqat dastur mavzulariga tayanadi.</p><span class="chip">AR: tajriba partada</span></div>
+      <div class="step"><span class="step-n">04</span><h3>Analitika</h3><p>Oʻquvchi progressi, xatolar tahlili, internet paydo boʻlganda sinxronlash.</p><span class="chip">Darslik mavzulariga mos</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="innovatsiya" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Innovatsiya</span>
+      <h2>Loyihaning yangiligi nimada?</h2>
+    </div>
+    <div class="grid2">
+      <div class="feat">
+        <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M8 10h22a4 4 0 0 1 4 4v22H12a4 4 0 0 1-4-4z M8 32a4 4 0 0 1 4-4h22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M15 17h12M15 22h8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <div><h3>Oʻquv dasturiga mos, oʻzbek tilida</h3><p>Har bir tajriba maktab darsligidagi mavzu va laboratoriya ishiga bogʻlangan.</p></div>
+      </div>
+      <div class="feat">
+        <svg viewBox="0 0 44 44" aria-hidden="true"><rect x="13" y="5" width="18" height="34" rx="4" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M19 33h6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M6 6l32 32" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".55"/></svg>
+        <div><h3>Arzon telefonda va internetsiz</h3><p>Qishloq maktablarida ham ishlaydi: kompyuter xonasi yoki internet shart emas.</p></div>
+      </div>
+      <div class="feat">
+        <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 5 37 11v10c0 9-6 15-15 18C13 36 7 30 7 21V11z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M24 13l-6 10h7l-5 9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><h3>Xavfsiz xato qilish</h3><p>Qisqa tutashuv yoki xavfli reaksiyani xavfsiz koʻrsatadi, SI-ustoz sababini tushuntiradi.</p></div>
+      </div>
+      <div class="feat">
+        <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M6 14V8h6M32 8h6v6M38 30v6h-6M12 36H6v-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 13l8 4.5v9L22 31l-8-4.5v-9z M14 17.5l8 4.5 8-4.5M22 22v9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+        <div><h3>AR rejimi</h3><p>Kamera orqali tajriba partaning ustida paydo boʻladi, dars yanada qiziqarli boʻladi.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="taqqoslash" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Analoglar bilan taqqoslash</span>
+      <h2>VirtuLab UZ mavjud usullardan nimasi bilan afzal?</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Mezon</th><th>An’anaviy laboratoriya</th><th>Bepul 2D simulyatsiyalar</th><th>Xorijiy pullik platformalar</th><th class="us">VirtuLab UZ</th></tr></thead>
+        <tbody>
+          <tr><td>Oʻzbek tili, darslikka moslik</td><td class="yes">Ha</td><td class="mid">Qisman (tarjima)</td><td class="no">Yoʻq</td><td class="us yes">Ha, toʻliq</td></tr>
+          <tr><td>Narx</td><td class="no">Qimmat: jihoz + reaktiv</td><td class="yes">Bepul</td><td class="no">Qimmat litsenziya</td><td class="us yes">Arzon, asosiy qismi bepul</td></tr>
+          <tr><td>Xavfsizlik</td><td class="no">Xavf bor</td><td class="yes">Xavfsiz</td><td class="yes">Xavfsiz</td><td class="us yes">Xavfsiz</td></tr>
+          <tr><td>SI-ustoz</td><td class="mid">Oʻqituvchi bandligiga bogʻliq</td><td class="no">Yoʻq</td><td class="mid">Cheklangan</td><td class="us yes">Ha, oʻzbekcha</td></tr>
+          <tr><td>Internetsiz ishlash</td><td class="yes">Ha</td><td class="mid">Qisman</td><td class="no">Yoʻq</td><td class="us yes">Ha</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="conclusion"><b>Xulosa:</b> VirtuLab UZ real laboratoriyani almashtirmaydi. U oʻquvchini real tajribaga tayyorlaydi va jihoz yoʻq joyda ham tajriba qilish imkonini beradi.</p>
+  </div>
+</section>
+
+<section id="moliya" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Iqtisodiy hisob</span>
+      <h2>Moliyaviy reja: 3 yil</h2>
+      <p class="lead">Taxminiy hisob. Barcha summalar soʻmda.</p>
+    </div>
+    <div class="stats4">
+      <div class="stat"><div class="stat-big num">300<small>mln</small></div><p>Boshlangʻich investitsiya</p></div>
+      <div class="stat"><div class="stat-big num">469<small>mln</small></div><p>Jami moliyalashtirish ehtiyoji</p></div>
+      <div class="stat"><div class="stat-big num">3,0<small>mlrd</small></div><p>3-yildagi sof foyda</p></div>
+      <div class="stat"><div class="stat-big num">21<small>oy</small></div><p>Investitsiyaning qoplanish muddati</p></div>
+    </div>
+    <div class="fin">
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>mln soʻm</th><th class="n">1-yil</th><th class="n">2-yil</th><th class="n">3-yil</th></tr></thead>
+          <tbody>
+            <tr><td>Daromad</td><td class="n">390</td><td class="n">2 100</td><td class="n">6 000</td></tr>
+            <tr><td>Xarajatlar</td><td class="n neg">−544</td><td class="n neg">−1 340</td><td class="n neg">−2 438</td></tr>
+            <tr><td>Soliqlar</td><td class="n neg">−16</td><td class="n neg">−114</td><td class="n neg">−534</td></tr>
+            <tr><td>Sof foyda</td><td class="n neg"><b>−169</b></td><td class="n pos"><b>646</b></td><td class="n pos"><b>3 028</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="chart">
+        <svg viewBox="0 0 360 220" role="img" aria-label="Daromad va sof foyda, yillar boʻyicha">
+          <!-- scale: 0..6000 mln -> y 180..20 (160px), 1000 = 26.67px; negative below 180 -->
+          <line x1="40" y1="20" x2="350" y2="20" stroke="var(--line)"/>
+          <line x1="40" y1="73.3" x2="350" y2="73.3" stroke="var(--line)"/>
+          <line x1="40" y1="126.7" x2="350" y2="126.7" stroke="var(--line)"/>
+          <line x1="40" y1="180" x2="350" y2="180" stroke="var(--muted)"/>
+          <text x="34" y="24" text-anchor="end">6000</text>
+          <text x="34" y="77" text-anchor="end">4000</text>
+          <text x="34" y="131" text-anchor="end">2000</text>
+          <text x="34" y="184" text-anchor="end">0</text>
+          <!-- year 1 -->
+          <rect x="62" y="169.6" width="34" height="10.4" fill="var(--accent)"/>
+          <rect x="100" y="180" width="34" height="4.5" fill="var(--warn)"/>
+          <!-- year 2 -->
+          <rect x="166" y="124" width="34" height="56" fill="var(--accent)"/>
+          <rect x="204" y="162.8" width="34" height="17.2" fill="var(--ok)"/>
+          <!-- year 3 -->
+          <rect x="270" y="20" width="34" height="160" fill="var(--accent)"/>
+          <rect x="308" y="99.3" width="34" height="80.7" fill="var(--ok)"/>
+          <text x="98" y="204" text-anchor="middle">1-yil</text>
+          <text x="202" y="204" text-anchor="middle">2-yil</text>
+          <text x="306" y="204" text-anchor="middle">3-yil</text>
+        </svg>
+        <div class="legend"><span><i style="background:var(--accent)"></i>Daromad</span><span><i style="background:var(--ok)"></i>Sof foyda</span><span><i style="background:var(--warn)"></i>Zarar</span><span>mln soʻm</span></div>
+      </div>
+    </div>
+    <div class="assume">
+      <h3>Asosiy farazlar</h3>
+      <ul>
+        <li>Maktab litsenziyasi: 6 mln soʻm/yil (1-yil pilot 3 mln)</li>
+        <li>Premium obuna: 25 ming soʻm/oy</li>
+        <li>Pullik oʻquvchilar: 800 → 4 000 → 10 000</li>
+        <li>1 ta 3D tajriba yaratish ≈ 6–7 mln soʻm</li>
+      </ul>
+      <p class="source">Hisob: 1 $ ≈ 12 000 soʻm; elektr 1 100 soʻm/kVt·soat, gaz 2 000 soʻm/m³ (2026); ijtimoiy soliq 12%; aylanma soligʻi 4% yoki foyda soligʻi 15%.</p>
+    </div>
+  </div>
+</section>
+
+<section id="reja" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Amaliyotga tatbiq etish</span>
+      <h2>Bosqichma-bosqich tatbiq etish rejasi</h2>
+    </div>
+    <div class="road">
+      <div class="phase now"><span class="when">0–3 OY</span><h3>MVP</h3><p>Fizikadan 10 ta tajriba, SI-ustoz, oʻz sinfimizda sinov.</p></div>
+      <div class="phase"><span class="when">3–6 OY</span><h3>Maktab piloti</h3><p>Kimyo va biologiya: 30 ta tajriba, tumandagi 5 ta maktabda pilot.</p></div>
+      <div class="phase"><span class="when">6–12 OY</span><h3>Kengaytirish</h3><p>100 ta tajriba, AR rejimi, oʻqituvchi paneli, vazirlik bilan hamkorlik.</p></div>
+      <div class="phase"><span class="when">12–24 OY</span><h3>Yangi bozorlar</h3><p>Rus, ingliz, qozoq tillari; Markaziy Osiyo maktablari.</p></div>
+    </div>
+    <div class="partners">
+      <span class="eyebrow">Hamkorlar</span>
+      <p>Maktabgacha va maktab ta’limi vazirligi · tuman maktabgacha va maktab ta’limi boʻlimi · pedagogika oliygohlari · IT Park · oʻquv markazlari</p>
+    </div>
+    <div class="assume">
+      <h3>MVP holati</h3>
+      <ul style="list-style:none;padding-left:0;columns:1">
+        <li><b style="color:var(--ok)">✓ Tayyor:</b> fizikadan 5 ta tajriba 3D muhitda</li>
+        <li><b style="color:var(--ok)">✓ Tayyor:</b> SI-ustoz darslik bazasi asosida oʻzbekcha javob beradi</li>
+        <li><b style="color:var(--accent-text)">◐ Jarayonda:</b> kimyo boʻlimi va oʻqituvchi paneli</li>
+        <li><b style="color:var(--muted)">○ Keyingi qadam:</b> oʻz maktabimizda 2 ta sinfda sinov va test natijalarini taqqoslash</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="natijalar" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Kutilayotgan natijalar</span>
+      <h2>1-yil yakunidagi maqsadli koʻrsatkichlar</h2>
+    </div>
+    <div class="stats3">
+      <div class="stat"><div class="stat-big num">100<small>ta</small></div><p>virtual tajriba: fizika, kimyo, biologiya</p></div>
+      <div class="stat"><div class="stat-big num">10 000+</div><p>foydalanuvchi oʻquvchi</p></div>
+      <div class="stat"><div class="stat-big num">15%</div><p>pilot sinflarda tabiiy fanlar test natijasi oʻsishi (maqsad)</p></div>
+      <div class="stat"><div class="stat-big num">50<small>ta</small></div><p>maktab platformadan foydalanadi</p></div>
+      <div class="stat"><div class="stat-big num">0<small>soʻm</small></div><p>virtual tajribalarda reaktiv va jihoz sarfi</p></div>
+      <div class="stat"><div class="stat-big num">24/7</div><p>uyda ham, darsda ham tajriba qilish imkoni</p></div>
+    </div>
+    <p class="source">Koʻrsatkichlar loyiha maqsadlari (prognoz). Uzoq muddatli ta’sir: TIMSS va PISA natijalarini oshirishga hissa.</p>
+  </div>
+</section>
+
+<section id="jamoa" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Jamoa va xavflar</span>
+      <h2>Kim amalga oshiradi va qanday xavflar bor?</h2>
+    </div>
+    <div class="team">
+      <div class="panel">
+        <h3>68-maktab jamoasi</h3>
+        <div class="person"><div class="ini">HJ</div><div><b>Hayrullayeva Joziba</b><span>Loyiha rahbari: 3D dasturlash, SI-ustoz va backend</span></div></div>
+        <div class="person"><div class="ini">AR</div><div><b>Azizbek Raufov</b><span>Ilmiy rahbar, fan oʻqituvchisi</span></div></div>
+      </div>
+      <div class="panel">
+        <h3>Xavflar va ularni kamaytirish</h3>
+        <div class="risk"><b>Oʻquvchida smartfon yoʻqligi</b><span>Maktab kompyuter xonasi va sinf uchun umumiy planshetlar.</span></div>
+        <div class="risk"><b>Virtual tajriba real tajribani almashtira olmaydi</b><span>Platforma real laboratoriyaga tayyorgarlik vositasi sifatida ishlatiladi.</span></div>
+        <div class="risk"><b>SI notoʻgʻri javob berishi</b><span>Javob faqat darslik bazasiga tayanadi, oʻqituvchi nazorati bor.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="closing">
+  <div class="wrap" style="padding-block:clamp(56px,8vw,96px)">
+    <span class="eyebrow">Xulosa</span>
+    <h2 style="margin-top:12px">Laboratoriya har bir oʻquvchiga</h2>
+    <div class="close3">
+      <div><b>Muammo</b><p>TIMSS va PISA’da tabiiy fanlar boʻyicha past natijalar, tajriba imkoniyati kam.</p></div>
+      <div><b>Yechim</b><p>Oʻzbek tilidagi 3D virtual laboratoriya, SI-ustoz va oʻqituvchi paneli.</p></div>
+      <div><b>Natija</b><p>Xavfsiz, arzon va qiziqarli tajriba orqali fanni chuqur tushunish.</p></div>
+    </div>
+    <div class="foot">
+      <span>© 2026 VirtuLab UZ</span>
+      <span>Oltinsoy tumani 68-umumta’lim maktabi</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const sU = $("sU"), sR = $("sR"), chat = $("chat");
+  const MAX_I = 6; // lamp rating, A
+  const fmt = x => (Math.round(x*100)/100).toString().replace(".", ",");
+  const tasks = [
+    {target:1,   text:"Tok kuchini aniq <b>1 A</b> qiling."},
+    {target:3,   text:"Endi tok kuchini <b>3 A</b> ga yetkazing."},
+    {target:0.5, text:"Tok kuchini <b>0,5 A</b> ga tushiring."},
+    {target:4,   text:"Oxirgisi: tok kuchini <b>4 A</b> qiling, lekin lampochka kuymasin."}
+  ];
+  let taskIdx = 0, prev = {U:6, R:3}, burnt = false;
+
+  function say(html, cls){
+    const d = document.createElement("div");
+    d.className = "msg" + (cls ? " " + cls : "");
+    d.innerHTML = html;
+    chat.appendChild(d);
+    while (chat.children.length > 8) chat.removeChild(chat.firstChild);
+    chat.scrollTop = chat.scrollHeight;
+  }
+  function showTask(){
+    const t = $("task");
+    if (taskIdx >= tasks.length){
+      t.classList.add("done");
+      t.innerHTML = '<span>🏆</span><div><b>Barcha topshiriqlar bajarildi!</b> Siz Om qonunini amalda qoʻlladingiz.</div>';
+      return;
+    }
+    t.classList.remove("done");
+    t.innerHTML = '<span>🎯</span><div><b>Topshiriq ' + (taskIdx+1) + '/4.</b> ' + tasks[taskIdx].text + '</div>';
+  }
+
+  // electrons
+  const wire = $("wire"), eg = $("electrons");
+  const L = wire.getTotalLength(), N = 18, dots = [];
+  for (let i=0;i<N;i++){
+    const c = document.createElementNS("http://www.w3.org/2000/svg","circle");
+    c.setAttribute("r","4"); c.setAttribute("fill","var(--accent)");
+    eg.appendChild(c); dots.push(c);
+  }
+  let offset = 0, last = performance.now();
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function place(){
+    for (let i=0;i<N;i++){
+      const p = wire.getPointAtLength(((offset + i*L/N) % L + L) % L);
+      dots[i].setAttribute("cx", p.x); dots[i].setAttribute("cy", p.y);
+    }
+  }
+  function tick(now){
+    const dt = Math.min(0.05, (now-last)/1000); last = now;
+    const I = current();
+    if (!burnt) offset += I * 22 * dt;
+    place();
+    requestAnimationFrame(tick);
+  }
+  function current(){ return (+sU.value) / (+sR.value); }
+
+  function render(){
+    const U = +sU.value, R = +sR.value, I = U/R;
+    burnt = I > MAX_I;
+    $("vU").textContent = $("oU").textContent = $("lblU").textContent = U + " V";
+    $("vR").textContent = $("oR").textContent = $("lblR").textContent = R + " Ω";
+    $("oI").textContent = $("lblI").textContent = fmt(I) + " A";
+    $("formula").innerHTML = "<b>I = U / R</b> = " + U + " V / " + R + " Ω = <b>" + fmt(I) + " A</b>";
+    $("roI").classList.toggle("danger", burnt);
+    const b = burnt ? 0 : Math.min(1, I / MAX_I);
+    $("bulb").setAttribute("opacity", burnt ? 0.08 : (0.15 + b*0.85).toFixed(2));
+    $("halo").setAttribute("opacity", burnt ? 0 : (b*0.55).toFixed(2));
+    $("halo").setAttribute("r", 34 + b*40);
+    $("filament").setAttribute("stroke", burnt ? "var(--warn)" : "var(--ink)");
+    $("lblLamp").textContent = burnt ? "lampochka kuydi" : "lampochka";
+    $("lblLamp").setAttribute("fill", burnt ? "var(--warn)" : "var(--muted)");
+    if (reduce) place();
+  }
+
+  function react(){
+    const U = +sU.value, R = +sR.value, I = U/R;
+    if (U === prev.U && R === prev.R) return;
+    const pI = prev.U/prev.R;
+    say((U!==prev.U && R!==prev.R) ? "U = " + U + " V, R = " + R + " Ω qildim" : (U!==prev.U ? "Kuchlanishni " + U + " V qildim" : "Qarshilikni " + R + " Ω qildim"), "me");
+    if (I > MAX_I){
+      say("<b>Diqqat!</b> Tok kuchi " + fmt(I) + " A boʻldi, lampochka esa koʻpi bilan " + MAX_I + " A ga chidaydi. U kuyib qoldi. Haqiqiy laboratoriyada bu xavfli boʻlardi, bu yerda esa xavfsiz. Qarshilikni oshiring yoki kuchlanishni kamaytiring.", "warn");
+    } else if (prev.U/prev.R > MAX_I) {
+      say("Zanjir yana xavfsiz: I = " + fmt(I) + " A. Lampochkani yangisiga almashtirdik.", "ok");
+    } else if (U === prev.U){
+      const k = R / prev.R;
+      if (k > 1){
+        say("Qarshilik " + fmt(k) + " marta oshdi, shuning uchun tok " + fmt(k) + " marta kamaydi: " + fmt(pI) + " A → " + fmt(I) + " A. Kuchlanish oʻzgarmasa, tok qarshilikka <b>teskari proporsional</b>.");
+      } else {
+        say("Qarshilik " + fmt(1/k) + " marta kamaydi, tok esa " + fmt(1/k) + " marta oshdi: " + fmt(pI) + " A → " + fmt(I) + " A. Lampochka yorqinroq yondi, chunki undan koʻproq zaryad oqib oʻtmoqda.");
+      }
+    } else if (R === prev.R){
+      say("Kuchlanish " + (U>prev.U ? "oshdi" : "kamaydi") + ", tok ham " + (U>prev.U ? "oshdi" : "kamaydi") + ": " + fmt(pI) + " A → " + fmt(I) + " A. Qarshilik oʻzgarmasa, tok kuchlanishga <b>toʻgʻri proporsional</b>.");
+    }
+    prev = {U, R};
+    if (taskIdx < tasks.length && Math.abs(I - tasks[taskIdx].target) < 1e-9){
+      say("✅ Toʻgʻri! " + U + " V / " + R + " Ω = " + fmt(I) + " A. Topshiriq bajarildi.", "ok");
+      taskIdx++; showTask();
+    }
+    render();
+  }
+
+  sU.addEventListener("input", render);
+  sR.addEventListener("input", render);
+  sU.addEventListener("change", react);
+  sR.addEventListener("change", react);
+  $("btnShort").addEventListener("click", () => { sU.value = 12; sR.value = 1; render(); react(); });
+  $("btnReset").addEventListener("click", () => {
+    sU.value = 6; sR.value = 3; prev = {U:6, R:3}; taskIdx = 0;
+    chat.innerHTML = ""; intro(); showTask(); render();
+  });
+  function intro(){
+    say("Salom! Bu <b>Om qonuni</b> tajribasi. Zanjirda U = 6 V, R = 3 Ω, demak I = U / R = 2 A.");
+    say("Slayderlarni suring, men har bir oʻzgarishni tushuntirib beraman.");
+  }
+
+  intro(); showTask(); render(); place();
+
+  // --- Ilova (PWA): oʻrnatish va oflayn rejim ---
+  const btnI = $("btnInstall");
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  let deferred = null;
+  function toast(html){
+    const old = document.querySelector(".toast"); if (old) old.remove();
+    const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role","status");
+    t.innerHTML = html + '<button type="button" aria-label="Yopish">×</button>';
+    t.querySelector("button").onclick = () => t.remove();
+    document.body.appendChild(t);
+  }
+  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; btnI.hidden = false; });
+  window.addEventListener("appinstalled", () => { btnI.hidden = true; deferred = null; toast("✅ VirtuLab UZ oʻrnatildi. Uni bosh ekrandan ochishingiz mumkin."); });
+  if (isIOS && !standalone) btnI.hidden = false;
+  btnI.addEventListener("click", async () => {
+    if (deferred){ deferred.prompt(); await deferred.userChoice.catch(()=>{}); deferred = null; btnI.hidden = true; return; }
+    toast("<b>iPhone/iPad'ga oʻrnatish:</b> Safari'da pastdagi <b>Ulashish</b> tugmasini bosing, soʻng <b>“Bosh ekranga qoʻshish”</b> ni tanlang.");
+  });
+  function netState(){
+    const b = document.querySelector(".brand"); let tag = b.querySelector(".offline");
+    if (!navigator.onLine && !tag){ tag = document.createElement("span"); tag.className = "offline"; tag.textContent = "oflayn"; b.appendChild(tag); }
+    if (navigator.onLine && tag) tag.remove();
+  }
+  addEventListener("online", netState); addEventListener("offline", netState); netState();
+  if ("serviceWorker" in navigator && location.protocol !== "file:"){
+    addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(()=>{}));
+  }
+  if (!reduce) requestAnimationFrame(tick);
+})();
+</script>
+
+</body>
+</html>
