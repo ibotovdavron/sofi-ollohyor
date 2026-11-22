@@ -22,7 +22,7 @@
   --bg:#F3F1EC; --surface:#FCFBF8; --ink:#201B18; --muted:#5E554E; --line:#E2DDD5;
   --accent:#C4410E; --accent-ink:#FFFFFF; --accent-soft:#FBE4D7; --accent-text:#B23A0C;
   --deep:#2B1A13; --deep-2:#3A2820; --deep-ink:#F6EFE9; --deep-muted:#CDBFB4; --glow:#F7A35C;
-  --ok:#2F7D4F; --warn:#B4231B;
+  --ok:#2F7D4F; --warn:#B4231B; --phys:#C4410E; --chem:#7A3FB0; --bio:#2F7D4F;
   --f-display:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;
   --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -32,12 +32,12 @@
   --bg:#17110E; --surface:#221915; --ink:#F2EBE5; --muted:#B4A69B; --line:#3A2D26;
   --accent:#E8622A; --accent-ink:#1A0E08; --accent-soft:#3B2219; --accent-text:#FF8E5C;
   --deep:#0F0A08; --deep-2:#22170F; --deep-ink:#F6EFE9; --deep-muted:#C2B3A7; --glow:#F7A35C;
-  --ok:#5BC28A; --warn:#FF6B5E; color-scheme:dark}}
+  --ok:#5BC28A; --warn:#FF6B5E; --phys:#FF8E5C; --chem:#B98CFF; --bio:#5BC28A; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#17110E; --surface:#221915; --ink:#F2EBE5; --muted:#B4A69B; --line:#3A2D26;
   --accent:#E8622A; --accent-ink:#1A0E08; --accent-soft:#3B2219; --accent-text:#FF8E5C;
   --deep:#0F0A08; --deep-2:#22170F; --deep-ink:#F6EFE9; --deep-muted:#C2B3A7; --glow:#F7A35C;
-  --ok:#5BC28A; --warn:#FF6B5E; color-scheme:dark}
+  --ok:#5BC28A; --warn:#FF6B5E; --phys:#FF8E5C; --chem:#B98CFF; --bio:#5BC28A; color-scheme:dark}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -137,7 +137,7 @@ section{padding-block:clamp(56px,8vw,96px);scroll-margin-top:60px}
 .ro.hot output{color:var(--accent-text)}
 .ro.danger output{color:var(--warn)}
 .controls{display:grid;gap:14px}
-.ctl{display:grid;grid-template-columns:120px minmax(0,1fr) 56px;gap:12px;align-items:center}
+.ctl{display:grid;grid-template-columns:120px minmax(0,1fr) 76px;gap:12px;align-items:center}
 .ctl label{font-weight:600;font-size:.95rem}
 .ctl .val{font:600 .95rem var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
 input[type=range]{width:100%;accent-color:var(--accent);height:28px}
@@ -247,6 +247,53 @@ td.us{font-weight:600}
 .close3 p{color:var(--deep-muted);margin-top:8px}
 .foot{margin-top:56px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--deep-muted);font-size:.9rem}
 
+/* --- laboratoriya katalogi --- */
+.shelf{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:18px}
+.shelf-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;color:var(--deep-muted);font-size:.78rem;margin-bottom:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.shelf-head b{color:var(--glow)}
+.shelf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{display:grid;gap:6px;align-content:start;text-align:left;background:var(--deep-2);color:var(--deep-ink);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;cursor:pointer;font:inherit;transition:transform .15s,border-color .15s}
+.tile:hover{transform:translateY(-2px);border-color:var(--glow)}
+.tile svg{width:26px;height:26px}
+.tile small{font-size:.7rem;color:var(--deep-muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.tile b{font-family:var(--f-display);font-size:.98rem;line-height:1.2;font-weight:600}
+.ic-phys{color:#F7A35C}.ic-chem{color:#C9A2FF}.ic-bio{color:#7FD6A0}
+.lab-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;scrollbar-width:thin}
+.lab-tab{flex:0 0 auto;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;font:inherit;color:var(--ink);text-align:left}
+.lab-tab:hover{border-color:var(--accent)}
+.lab-tab[aria-selected="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.lab-tab svg{width:22px;height:22px;flex-shrink:0}
+.lab-tab span{display:grid;line-height:1.25}
+.lab-tab small{font-size:.7rem;color:var(--muted);font-weight:600}
+.lab-tab b{font-size:.92rem;font-family:var(--f-display);font-weight:600;white-space:nowrap}
+.lab-tab i{font-style:normal;font-size:.72rem;font-weight:700;color:var(--muted);background:var(--bg);border-radius:999px;padding:2px 8px;font-variant-numeric:tabular-nums}
+.lab-tab i.done{color:var(--ok)}
+.subj{font:700 .72rem var(--f-display);letter-spacing:.12em;text-transform:uppercase}
+.bench-head h3{font-size:1.2rem;margin-top:2px}
+.bench-head > span{max-width:32ch;text-align:right}
+.stage{width:100%;max-width:100%;aspect-ratio:640/380;height:auto;display:block;background:var(--bg);border-radius:14px}
+.readouts{grid-template-columns:repeat(4,minmax(0,1fr))}
+.ro{min-width:0}
+.ro label{text-transform:none;letter-spacing:0;font-size:.8rem}
+.ro output{font-size:1.3rem;display:block;overflow-wrap:anywhere}
+.ro.word output{font:600 1.02rem/1.35 var(--f-body);padding-top:4px}
+.ro.good output{color:var(--ok)}
+.ctl.seg-row{grid-template-columns:120px minmax(0,1fr)}
+.ctl .lbl{font-weight:600;font-size:.95rem}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font:600 .86rem var(--f-body);padding:7px 12px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.seg button:hover{border-color:var(--accent)}
+.seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.formula sub{font-size:.75em}
+.formula small{display:block;margin-top:4px;font-size:.85em}
+.task{display:block}
+.linkbtn{font:600 .88rem var(--f-body);background:none;border:0;color:var(--accent-text);text-decoration:underline;cursor:pointer;padding:0}
+@media (max-width:620px){
+  .readouts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ctl.seg-row{grid-template-columns:minmax(0,1fr)}
+  .bench-head > span{text-align:left}
+  .bench{padding:14px}
+}
 @media (max-width:900px){
   .hero .wrap,.demo,.fin,.team{grid-template-columns:minmax(0,1fr)}
   .phone{margin:0 auto}
@@ -255,7 +302,7 @@ td.us{font-weight:600}
 }
 @media (max-width:620px){
   .grid2,.steps,.road,.stats4{grid-template-columns:minmax(0,1fr)}
-  .ctl{grid-template-columns:minmax(0,1fr) 56px}
+  .ctl{grid-template-columns:minmax(0,1fr) 76px}
   .ctl input{grid-column:1/-1;grid-row:2}
   .readouts .ro output{font-size:1.25rem}
   .assume ul{columns:1}
@@ -280,7 +327,7 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
       <a href="#moliya">Moliya</a>
       <a href="#reja">Reja</a>
       <a href="#jamoa">Jamoa</a>
-      <a class="nav-cta" href="#sinov">Sinab koʻrish</a>
+      <a class="nav-cta" href="#lab">Laboratoriya</a>
     </div>
     <button class="install" id="btnInstall" type="button" hidden>
       <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -297,23 +344,18 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
         Ta’lim startapi
       </span>
       <h1>VirtuLab UZ</h1>
-      <p class="lead">Har bir oʻquvchining choʻntagida laboratoriya: oʻzbek tilidagi 3D virtual tajribalar va SI-ustoz.</p>
+      <p class="lead">Har bir oʻquvchining choʻntagida laboratoriya: oʻzbek tilidagi virtual tajribalar va SI-ustoz.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#sinov">Om qonunini sinab koʻring
+        <a class="btn btn-primary" href="#lab">Laboratoriyaga kirish
           <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
         <a class="btn btn-ghost" href="#muammo">Loyiha haqida</a>
       </div>
       <p class="byline">Muallif: <b>Hayrullayeva Joziba</b>, Oltinsoy tumani 68-umumta’lim maktabi oʻquvchisi</p>
     </div>
-    <div class="phone" aria-label="Ilova interfeysi maketi">
-      <div class="phone-in">
-        <div class="phone-top">VirtuLab · Fizika, 8-sinf</div>
-        <div class="bub sys">Tajriba: <b>Om qonuni</b><br><span class="mono">U = 6 V, R = 3 Ω → I = 2 A</span></div>
-        <div class="bub me">Qarshilikni 6 Ω qildim</div>
-        <div class="bub sys"><b>Ustoz:</b> Toʻgʻri! Tok kuchi 1 A ga tushdi. Nega? Qarshilik 2 baravar oshsa, tok 2 baravar kamayadi.</div>
-        <div class="bub me">Keyingi topshiriq</div>
-      </div>
+    <div class="shelf">
+      <div class="shelf-head"><span>Laboratoriya ishlari</span><b>6 ta tajriba</b></div>
+      <div class="shelf-grid" id="shelf"></div>
     </div>
   </div>
 </header>
@@ -379,74 +421,36 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
   </div>
 </section>
 
-<section id="sinov">
+<section id="lab">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">Prototip · Fizika, 8-sinf</span>
-      <h2>Om qonunini oʻzingiz sinab koʻring</h2>
-      <p class="lead">Kuchlanish va qarshilikni oʻzgartiring. Zanjirdagi tok, lampochka yorugʻligi va ustozning izohi darhol yangilanadi.</p>
+      <span class="eyebrow">Virtual laboratoriya</span>
+      <h2>Tajribani tanlang va oʻzingiz bajaring</h2>
+      <p class="lead">Fizika, kimyo va biologiyadan 6 ta laboratoriya ishi. Parametrlarni oʻzgartiring, natijani kuzating va SI-ustoz topshiriqlarini bajaring.</p>
     </div>
+    <div class="lab-tabs" id="labTabs" role="tablist" aria-label="Laboratoriya ishlari"></div>
     <div class="demo">
       <div class="bench">
-        <div class="bench-head"><h3>Elektr zanjiri</h3><span>Batareya · rezistor · lampochka · ampermetr</span></div>
-        <svg class="circuit" id="circuit" viewBox="0 0 560 300" role="img" aria-label="Elektr zanjiri sxemasi">
-          <path id="wire" d="M90 60 H470 V240 H90 Z" fill="none" stroke="var(--muted)" stroke-width="4" stroke-linejoin="round"/>
-          <g id="electrons"></g>
-          <!-- battery -->
-          <rect x="62" y="118" width="56" height="64" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
-          <line x1="76" y1="138" x2="104" y2="138" stroke="var(--ink)" stroke-width="4"/>
-          <line x1="82" y1="150" x2="98" y2="150" stroke="var(--ink)" stroke-width="4"/>
-          <line x1="76" y1="162" x2="104" y2="162" stroke="var(--ink)" stroke-width="4"/>
-          <text x="128" y="146" fill="var(--ink)" font-family="var(--f-mono)" font-size="15" font-weight="600" id="lblU">6 V</text>
-          <text x="128" y="164" fill="var(--muted)" font-family="var(--f-body)" font-size="11">batareya</text>
-          <!-- resistor -->
-          <rect x="230" y="44" width="100" height="32" rx="5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
-          <path id="zig" d="M240 60 l8-10 l12 20 l12-20 l12 20 l12-20 l12 20 l6-10" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>
-          <text x="280" y="102" text-anchor="middle" fill="var(--ink)" font-family="var(--f-mono)" font-size="15" font-weight="600" id="lblR">3 Ω</text>
-          <!-- lamp -->
-          <circle id="halo" cx="470" cy="150" r="60" fill="var(--glow)" opacity=".35"/>
-          <circle cx="470" cy="150" r="26" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
-          <circle id="bulb" cx="470" cy="150" r="22" fill="var(--glow)" opacity=".6"/>
-          <path id="filament" d="M455 135 L485 165 M485 135 L455 165" stroke="var(--ink)" stroke-width="2.5"/>
-          <text x="420" y="196" text-anchor="end" fill="var(--muted)" font-family="var(--f-body)" font-size="11" id="lblLamp">lampochka</text>
-          <!-- ammeter -->
-          <circle cx="280" cy="240" r="30" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
-          <text x="280" y="236" text-anchor="middle" fill="var(--muted)" font-family="var(--f-display)" font-size="12" font-weight="700">A</text>
-          <text x="280" y="254" text-anchor="middle" fill="var(--ink)" font-family="var(--f-mono)" font-size="14" font-weight="600" id="lblI">2 A</text>
-        </svg>
-        <div class="readouts">
-          <div class="ro"><label>Kuchlanish</label><output id="oU" class="num">6 V</output></div>
-          <div class="ro"><label>Qarshilik</label><output id="oR" class="num">3 Ω</output></div>
-          <div class="ro hot" id="roI"><label>Tok kuchi</label><output id="oI" class="num">2 A</output></div>
+        <div class="bench-head">
+          <div><span class="subj" id="labSubj"></span><h3 id="labTitle"></h3></div>
+          <span id="labGoal"></span>
         </div>
-        <div class="controls">
-          <div class="ctl">
-            <label for="sU">Kuchlanish, U</label>
-            <input type="range" id="sU" min="1" max="12" step="1" value="6">
-            <span class="val" id="vU">6 V</span>
-          </div>
-          <div class="ctl">
-            <label for="sR">Qarshilik, R</label>
-            <input type="range" id="sR" min="1" max="20" step="1" value="3">
-            <span class="val" id="vR">3 Ω</span>
-          </div>
-        </div>
-        <div class="formula" id="formula"><b>I = U / R</b> = 6 V / 3 Ω = <b>2 A</b></div>
-        <div class="bench-actions">
-          <button class="btn btn-sm btn-line" id="btnShort" type="button">Xavfli tajriba: qarshilikni 1 Ω ga tushirish</button>
-          <button class="btn btn-sm btn-line" id="btnReset" type="button">Boshidan boshlash</button>
-        </div>
+        <canvas class="stage" id="stage" role="img"></canvas>
+        <div class="readouts" id="readouts"></div>
+        <div class="controls" id="controls"></div>
+        <div class="formula" id="formula"></div>
+        <div class="bench-actions" id="actions"></div>
       </div>
       <div class="tutor" aria-live="polite">
         <div class="tutor-head">
           <div class="avatar">SI</div>
           <div><b>SI-ustoz</b><small>Darslik bazasi asosida, oʻzbek tilida</small></div>
         </div>
-        <div class="task" id="task"><span>🎯</span><div><b>Topshiriq 1/4.</b> <span id="taskText"></span></div></div>
+        <div class="task" id="task"></div>
         <div class="chat" id="chat"></div>
       </div>
     </div>
-    <p class="demo-note">Bu namoyish varianti: ustoz javoblari oldindan yozilgan qoidalar asosida chiqadi. Toʻliq ilovada javoblarni darslik bazasiga tayangan til modeli beradi.</p>
+    <p class="demo-note">Bu veb-namoyish: tajribalar 2D simulyatsiyada, ustoz javoblari oldindan yozilgan qoidalar asosida chiqadi. Toʻliq ilovada tajribalar 3D muhitda boʻladi, javoblarni esa darslik bazasiga tayangan til modeli beradi. Bajarilgan topshiriqlar shu qurilmada saqlanadi.</p>
   </div>
 </section>
 
@@ -666,152 +670,799 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 
 <script>
 (function(){
+  "use strict";
   const $ = id => document.getElementById(id);
-  const sU = $("sU"), sR = $("sR"), chat = $("chat");
-  const MAX_I = 6; // lamp rating, A
-  const fmt = x => (Math.round(x*100)/100).toString().replace(".", ",");
-  const tasks = [
-    {target:1,   text:"Tok kuchini aniq <b>1 A</b> qiling."},
-    {target:3,   text:"Endi tok kuchini <b>3 A</b> ga yetkazing."},
-    {target:0.5, text:"Tok kuchini <b>0,5 A</b> ga tushiring."},
-    {target:4,   text:"Oxirgisi: tok kuchini <b>4 A</b> qiling, lekin lampochka kuymasin."}
-  ];
-  let taskIdx = 0, prev = {U:6, R:3}, burnt = false;
+  const W = 640, H = 380;
+  const MONO = "'JetBrains Mono', ui-monospace, monospace";
+  const DISP = "'Space Grotesk', system-ui, sans-serif";
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const fmt = (x, d = 2) => {
+    if (!isFinite(x)) return "—";
+    const m = Math.pow(10, d);
+    return (Math.round(x * m) / m).toString().replace(".", ",");
+  };
+
+  // ---------- theme colours for canvas ----------
+  let C = {};
+  function readColors(){
+    const cs = getComputedStyle(document.documentElement);
+    const g = n => cs.getPropertyValue(n).trim();
+    C = { ink:g("--ink"), muted:g("--muted"), line:g("--line"), bg:g("--bg"), surface:g("--surface"),
+          accent:g("--accent"), glow:g("--glow"), ok:g("--ok"), warn:g("--warn") };
+  }
+  readColors();
+  try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readColors); } catch(e){}
+  new MutationObserver(readColors).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+
+  function rgba(hex, a){
+    const h = (hex || "").replace("#", "");
+    if (h.length !== 6) return hex;
+    return `rgba(${parseInt(h.slice(0,2),16)},${parseInt(h.slice(2,4),16)},${parseInt(h.slice(4,6),16)},${a})`;
+  }
+  function T(c, str, x, y, o = {}){
+    c.font = `${o.w || 500} ${o.s || 13}px ${o.f || "Inter, system-ui, sans-serif"}`;
+    c.fillStyle = o.c || C.ink; c.textAlign = o.a || "left"; c.textBaseline = "alphabetic";
+    c.fillText(str, x, y);
+  }
+  function rr(c, x, y, w, h, r){
+    c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
+  }
+  function line(c, x1, y1, x2, y2, col, w = 2){ c.strokeStyle = col; c.lineWidth = w; c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke(); }
+  function arrow(c, x1, y1, x2, y2, col, w = 3){
+    line(c, x1, y1, x2, y2, col, w);
+    const a = Math.atan2(y2 - y1, x2 - x1), L = 10;
+    c.fillStyle = col; c.beginPath(); c.moveTo(x2, y2);
+    c.lineTo(x2 - L * Math.cos(a - .45), y2 - L * Math.sin(a - .45));
+    c.lineTo(x2 - L * Math.cos(a + .45), y2 - L * Math.sin(a + .45)); c.closePath(); c.fill();
+  }
+  function dot(c, x, y, r, col){ c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill(); }
+
+  // =================================================================
+  // LABORATORIYALAR
+  // =================================================================
+  const ICONS = {
+    ohm:'<path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+    pendulum:'<path d="M5 3h14M12 3l-4 12.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="7.3" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="2"/>',
+    refraction:'<path d="M2 12h20" stroke="currentColor" stroke-width="1.6" opacity=".5"/><path d="M4 3l8 9 4 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
+    archimedes:'<rect x="8" y="4" width="8" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12c2 1.3 4 1.3 6 0s4-1.3 6 0 4 1.3 6 0M3 18c2 1.3 4 1.3 6 0s4-1.3 6 0 4 1.3 6 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    titration:'<path d="M9 3h6M10 3v6l-5 9.5A2 2 0 0 0 6.8 21h10.4a2 2 0 0 0 1.8-2.5L14 9V3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 15h9" stroke="currentColor" stroke-width="2"/>',
+    photosynthesis:'<path d="M5 19C5 10 11 4 20 4c0 9-6 15-15 15zM5 19l8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+  };
+
+  // ---------- 1. Om qonuni ----------
+  function perim(x0, y0, x1, y1, s){
+    const w = x1 - x0, h = y1 - y0;
+    if (s < w) return [x0 + s, y0]; s -= w;
+    if (s < h) return [x1, y0 + s]; s -= h;
+    if (s < w) return [x1 - s, y1]; s -= w;
+    return [x0, y1 - s];
+  }
+  const OHM = {
+    id:"ohm", subject:"Fizika", sc:"phys", grade:"8-sinf", title:"Om qonuni",
+    goal:"Tok kuchi kuchlanish va qarshilikka qanday bogʻliq?",
+    controls:[
+      {id:"U", label:"Kuchlanish, U", type:"range", min:1, max:12, step:1, value:6, unit:"V"},
+      {id:"R", label:"Qarshilik, R", type:"range", min:1, max:20, step:1, value:3, unit:"Ω"}
+    ],
+    calc: s => { const I = s.U / s.R; return { I, P: s.U * I, burnt: I > 6 }; },
+    readouts: (s, d) => [
+      ["Kuchlanish", `${s.U} V`], ["Qarshilik", `${s.R} Ω`],
+      ["Tok kuchi", d.burnt ? "uzildi" : `${fmt(d.I)} A`, d.burnt ? "danger" : "hot"],
+      ["Quvvat", d.burnt ? "0 W" : `${fmt(d.P, 1)} W`]
+    ],
+    formula: (s, d) => `<b>I = U / R</b> = ${s.U} V / ${s.R} Ω = <b>${fmt(d.I)} A</b>` + (d.burnt ? `<small>Lampochka koʻpi bilan 6 A ga chidaydi</small>` : ""),
+    intro:["Salom! Bu <b>Om qonuni</b> tajribasi. Zanjirda batareya, rezistor, lampochka va ampermetr bor.",
+           "Hozir U = 6 V, R = 3 Ω, demak I = U / R = 2 A. Slayderlarni suring, men har bir oʻzgarishni tushuntiraman."],
+    explain(p, s, pd, d){
+      if (d.burnt) return [[`<b>Diqqat!</b> Tok kuchi ${fmt(d.I)} A boʻldi, lampochka esa koʻpi bilan 6 A ga chidaydi va kuyib qoldi. Haqiqiy laboratoriyada bu xavfli boʻlardi, bu yerda esa xavfsiz. Qarshilikni oshiring yoki kuchlanishni kamaytiring.`, "warn"]];
+      if (pd.burnt) return [[`Zanjir yana xavfsiz: I = ${fmt(d.I)} A. Lampochkani yangisiga almashtirdik.`, "ok"]];
+      if (s.U === p.U){
+        const k = s.R / p.R;
+        return k > 1
+          ? [[`Qarshilik ${fmt(k)} marta oshdi, tok esa ${fmt(k)} marta kamaydi: ${fmt(pd.I)} A → ${fmt(d.I)} A. Kuchlanish oʻzgarmasa, tok qarshilikka <b>teskari proporsional</b>.`]]
+          : [[`Qarshilik ${fmt(1/k)} marta kamaydi, tok ${fmt(1/k)} marta oshdi: ${fmt(pd.I)} A → ${fmt(d.I)} A. Lampochka yorqinroq yondi.`]];
+      }
+      if (s.R === p.R) return [[`Kuchlanish ${s.U > p.U ? "oshdi" : "kamaydi"}, tok ham ${s.U > p.U ? "oshdi" : "kamaydi"}: ${fmt(pd.I)} A → ${fmt(d.I)} A. Qarshilik oʻzgarmasa, tok kuchlanishga <b>toʻgʻri proporsional</b>.`]];
+      return [[`Ikkala kattalik oʻzgardi: I = ${s.U} / ${s.R} = ${fmt(d.I)} A.`]];
+    },
+    tasks:[
+      {text:"Tok kuchini aniq <b>1 A</b> qiling.", check:(s,d)=>!d.burnt && Math.abs(d.I-1)<1e-9},
+      {text:"Endi tok kuchini <b>3 A</b> ga yetkazing.", check:(s,d)=>!d.burnt && Math.abs(d.I-3)<1e-9},
+      {text:"Tok kuchini <b>0,5 A</b> ga tushiring.", check:(s,d)=>!d.burnt && Math.abs(d.I-.5)<1e-9},
+      {text:"Oxirgisi: tok kuchini <b>4 A</b> qiling, lekin lampochka kuymasin.", check:(s,d)=>!d.burnt && Math.abs(d.I-4)<1e-9}
+    ],
+    actions:[{label:"Xavfli tajriba: U = 12 V, R = 1 Ω", run:s=>{ s.U = 12; s.R = 1; }}],
+    draw(c, s, d, sim, dt){
+      const x0 = 110, y0 = 70, x1 = 530, y1 = 310, P = 2 * ((x1 - x0) + (y1 - y0));
+      c.lineJoin = "round"; c.lineWidth = 4; c.strokeStyle = C.muted; c.strokeRect(x0, y0, x1 - x0, y1 - y0);
+      if (!d.burnt) sim.off = (sim.off || 0) + d.I * 30 * dt;
+      for (let i = 0; i < 22; i++){
+        const [x, y] = perim(x0, y0, x1, y1, (((sim.off || 0) + i * P / 22) % P + P) % P);
+        dot(c, x, y, 4, C.accent);
+      }
+      // batareya
+      rr(c, x0 - 28, 150, 56, 80, 8); c.fillStyle = C.surface; c.fill(); c.lineWidth = 2.5; c.strokeStyle = C.ink; c.stroke();
+      [[168,20],[182,11],[198,20],[212,11]].forEach(([y,hw]) => line(c, x0 - hw, y, x0 + hw, y, C.ink, 4));
+      T(c, `${s.U} V`, x0 + 40, 192, {s:17, w:600, f:MONO});
+      T(c, "batareya", x0 + 40, 210, {s:11, c:C.muted});
+      // rezistor
+      rr(c, 270, y0 - 17, 100, 34, 6); c.fillStyle = C.surface; c.fill(); c.lineWidth = 2.5; c.strokeStyle = C.ink; c.stroke();
+      c.beginPath(); c.moveTo(280, y0); let zx = 280;
+      for (let i = 0; i < 6; i++){ c.lineTo(zx + 7, y0 + (i % 2 ? 10 : -10)); zx += 13; }
+      c.lineTo(360, y0); c.strokeStyle = C.accent; c.lineWidth = 2.5; c.stroke();
+      T(c, `${s.R} Ω`, 320, y0 + 44, {a:"center", s:17, w:600, f:MONO});
+      T(c, "rezistor", 320, y0 + 61, {a:"center", s:11, c:C.muted});
+      // lampochka
+      const b = d.burnt ? 0 : Math.min(1, d.I / 6), lx = x1, ly = 190;
+      if (b > 0){
+        const g = c.createRadialGradient(lx, ly, 10, lx, ly, 40 + 70 * b);
+        g.addColorStop(0, rgba(C.glow, .75 * b)); g.addColorStop(1, rgba(C.glow, 0));
+        c.fillStyle = g; c.beginPath(); c.arc(lx, ly, 40 + 70 * b, 0, Math.PI * 2); c.fill();
+      }
+      c.beginPath(); c.arc(lx, ly, 26, 0, Math.PI * 2); c.fillStyle = C.surface; c.fill(); c.lineWidth = 2.5; c.strokeStyle = C.ink; c.stroke();
+      dot(c, lx, ly, 21, rgba(C.glow, d.burnt ? .05 : .15 + .85 * b));
+      c.strokeStyle = d.burnt ? C.warn : C.ink; c.lineWidth = 2.5; c.beginPath();
+      c.moveTo(lx - 14, ly - 14); c.lineTo(lx + 14, ly + 14); c.moveTo(lx + 14, ly - 14); c.lineTo(lx - 14, ly + 14); c.stroke();
+      T(c, d.burnt ? "lampochka kuydi" : "lampochka", lx - 40, ly + 5, {a:"right", s:12, w:d.burnt ? 700 : 500, c:d.burnt ? C.warn : C.muted});
+      // ampermetr
+      c.beginPath(); c.arc(320, y1, 32, 0, Math.PI * 2); c.fillStyle = C.surface; c.fill(); c.lineWidth = 2.5; c.strokeStyle = C.ink; c.stroke();
+      T(c, "A", 320, y1 - 8, {a:"center", s:12, w:700, c:C.muted, f:DISP});
+      T(c, `${fmt(d.burnt ? 0 : d.I)} A`, 320, y1 + 13, {a:"center", s:14, w:600, f:MONO});
+    }
+  };
+
+  // ---------- 2. Matematik mayatnik ----------
+  const PLANETS = [{v:9.81,t:"Yer"},{v:1.62,t:"Oy"},{v:3.71,t:"Mars"},{v:24.79,t:"Yupiter"}];
+  const planetName = g => (PLANETS.find(p => p.v === g) || {t:""}).t;
+  const PEND = {
+    id:"pendulum", subject:"Fizika", sc:"phys", grade:"9-sinf", title:"Matematik mayatnik",
+    goal:"Tebranish davri nimaga bogʻliq: ip uzunligi, sayyora yoki amplitudaga?",
+    controls:[
+      {id:"L", label:"Ip uzunligi, L", type:"range", min:.2, max:2, step:.05, value:.5, unit:"m"},
+      {id:"g", label:"Sayyora", type:"seg", options:PLANETS, value:9.81},
+      {id:"A", label:"Amplituda", type:"range", min:5, max:30, step:1, value:15, unit:"°", dec:0}
+    ],
+    calc: s => { const Tp = 2 * Math.PI * Math.sqrt(s.L / s.g); return { T:Tp, f:1 / Tp }; },
+    readouts: (s, d) => [
+      ["Ip uzunligi", `${fmt(s.L)} m`], ["g", `${fmt(s.g)} m/s²`],
+      ["Davr, T", `${fmt(d.T)} s`, "hot"], ["Chastota", `${fmt(d.f)} Hz`]
+    ],
+    formula: (s, d) => `<b>T = 2π√(L / g)</b> = 2π√(${fmt(s.L)} / ${fmt(s.g)}) = <b>${fmt(d.T)} s</b>`,
+    intro:["Bu <b>matematik mayatnik</b>: ipga osilgan yuk. Bir marta toʻliq borib-kelish vaqti <b>davr</b> (T) deyiladi.",
+           "Ip uzunligini, sayyorani va amplitudani oʻzgartirib, qaysi biri davrga ta’sir qilishini aniqlang."],
+    explain(p, s, pd, d, ch){
+      const out = [];
+      if (ch.has("L")){
+        const k = s.L / p.L, up = k > 1;
+        out.push([`Ip uzunligi ${fmt(up ? k : 1/k)} marta ${up ? "oshdi" : "kamaydi"}, davr esa √${fmt(up ? k : 1/k)} ≈ ${fmt(Math.sqrt(up ? k : 1/k))} marta ${up ? "oshdi" : "kamaydi"}: ${fmt(pd.T)} s → ${fmt(d.T)} s. Davr uzunlikning <b>kvadrat ildiziga</b> proporsional.`]);
+      }
+      if (ch.has("g")){
+        const less = s.g < p.g;
+        out.push([`${planetName(s.g)}da g = ${fmt(s.g)} m/s². Tortishish ${less ? "kuchsizroq" : "kuchliroq"}, shuning uchun mayatnik ${less ? "sekinroq" : "tezroq"} tebranadi: T = ${fmt(d.T)} s.`]);
+      }
+      if (ch.has("A")){
+        out.push([`Amplituda ${s.A}° boʻldi, lekin davr oʻzgarmadi (${fmt(d.T)} s). Kichik burchaklarda davr amplitudaga bogʻliq emas. Buni Galiley cherkovdagi qandil tebranishini kuzatib aniqlagan.` + (s.A > 20 ? " 20° dan katta burchaklarda formula biroz xatolik bera boshlaydi." : "")]);
+      }
+      return out;
+    },
+    tasks:[
+      {text:"Yerda davrni <b>2 s</b> ga yaqinlashtiring (±0,05 s). Bunday mayatnik «sekund mayatnigi» deyiladi.", check:(s,d)=>s.g===9.81 && Math.abs(d.T-2)<=.05},
+      {text:"Mayatnikni <b>Oyga</b> olib boring va davrni <b>3 s</b> dan oshiring.", check:(s,d)=>s.g===1.62 && d.T>3},
+      {text:"<b>Marsda</b> davri 2 s boʻladigan uzunlikni toping (±0,1 s).", check:(s,d)=>s.g===3.71 && Math.abs(d.T-2)<=.1}
+    ],
+    actions:[{label:"Sekundomerni nollash", run:(s,sim)=>{ sim.pt = 0; }, silent:true}],
+    onUpdate(sim, s){ const k = `${s.L}|${s.g}|${s.A}`; if (sim.key !== k){ sim.key = k; sim.pt = 0; } },
+    draw(c, s, d, sim, dt){
+      const px = 320, py = 44, Lp = 30 + s.L * 140;
+      sim.pt = (sim.pt || 0) + dt;
+      const A = s.A * Math.PI / 180, th = A * Math.cos(2 * Math.PI * sim.pt / d.T);
+      c.fillStyle = C.line; c.fillRect(px - 110, py - 14, 220, 14);
+      for (let x = px - 104; x < px + 110; x += 12) line(c, x, py - 14, x + 8, py - 2, C.muted, 1);
+      c.setLineDash([5, 6]); c.strokeStyle = C.muted; c.lineWidth = 1.5;
+      c.beginPath(); c.moveTo(px, py); c.lineTo(px, py + Lp + 26); c.stroke();
+      c.beginPath(); c.arc(px, py, Lp, Math.PI / 2 - A, Math.PI / 2 + A); c.stroke(); c.setLineDash([]);
+      const bx = px + Lp * Math.sin(th), by = py + Lp * Math.cos(th);
+      line(c, px, py, bx, by, C.ink, 2);
+      dot(c, px, py, 5, C.ink);
+      const g = c.createRadialGradient(bx - 5, by - 5, 2, bx, by, 16);
+      g.addColorStop(0, rgba(C.glow, 1)); g.addColorStop(1, C.accent);
+      c.fillStyle = g; c.beginPath(); c.arc(bx, by, 15, 0, Math.PI * 2); c.fill();
+      c.lineWidth = 2; c.strokeStyle = C.ink; c.stroke();
+      T(c, `L = ${fmt(s.L)} m`, px + 10, py + 22, {s:12, c:C.muted, f:MONO});
+      T(c, `Tebranishlar: ${Math.floor(sim.pt / d.T)}`, 24, 34, {s:13, w:600});
+      T(c, `Vaqt: ${fmt(sim.pt, 1)} s`, 24, 54, {s:13, c:C.muted, f:MONO});
+      T(c, planetName(s.g), 616, 34, {a:"right", s:15, w:700, f:DISP});
+      T(c, `g = ${fmt(s.g)} m/s²`, 616, 54, {a:"right", s:12, c:C.muted, f:MONO});
+    }
+  };
+
+  // ---------- 3. Yorugʻlik sinishi ----------
+  const MEDIA = [{v:1.33,t:"Suv"},{v:1.5,t:"Shisha"},{v:2.42,t:"Olmos"}];
+  const MT = {1.33:"rgba(70,150,220,.20)", 1.5:"rgba(110,185,175,.22)", 2.42:"rgba(170,140,235,.22)"};
+  const medName = n => (MEDIA.find(m => m.v === n) || {t:""}).t;
+  const REFR = {
+    id:"refraction", subject:"Fizika", sc:"phys", grade:"8-sinf", title:"Yorugʻlik sinishi",
+    goal:"Nur ikki muhit chegarasida qanday sinadi va qachon toʻliq qaytadi?",
+    controls:[
+      {id:"a", label:"Tushish burchagi, α", type:"range", min:0, max:85, step:1, value:30, unit:"°", dec:0},
+      {id:"m", label:"Muhit", type:"seg", options:MEDIA, value:1.33},
+      {id:"dir", label:"Nur yoʻnalishi", type:"seg", options:[{v:0,t:"Havodan muhitga"},{v:1,t:"Muhitdan havoga"}], value:0}
+    ],
+    calc: s => {
+      const n1 = s.dir ? s.m : 1, n2 = s.dir ? 1 : s.m, a = s.a * Math.PI / 180;
+      const sb = n1 / n2 * Math.sin(a), tir = sb > 1 + 1e-12;
+      const b = tir ? NaN : Math.asin(Math.min(1, sb)) * 180 / Math.PI;
+      const crit = n1 > n2 ? Math.asin(n2 / n1) * 180 / Math.PI : null;
+      return { n1, n2, sb, tir, b, crit };
+    },
+    readouts: (s, d) => [
+      ["Tushish, α", `${s.a}°`], ["Sinish, β", d.tir ? "yoʻq" : `${fmt(d.b, 1)}°`, d.tir ? "danger" : "hot"],
+      ["n₁ → n₂", `${fmt(d.n1)} → ${fmt(d.n2)}`], ["Chegaraviy burchak", d.crit ? `${fmt(d.crit, 1)}°` : "—"]
+    ],
+    formula: (s, d) => d.tir
+      ? `sin β = (n₁ / n₂)·sin α = ${fmt(d.sb)} &gt; 1 → <b>toʻliq ichki qaytish</b>`
+      : `<b>n₁·sin α = n₂·sin β</b> → β = <b>${fmt(d.b, 1)}°</b>`,
+    intro:["Bu <b>yorugʻlik sinishi</b> tajribasi. Nur bir muhitdan ikkinchisiga oʻtganda yoʻnalishini oʻzgartiradi.",
+           "Shtrix chiziq: chegaraga perpendikulyar (normal). Burchaklar normaldan oʻlchanadi."],
+    explain(p, s, pd, d, ch){
+      if (d.tir) return [[`<b>Toʻliq ichki qaytish!</b> α = ${s.a}° chegaraviy burchakdan (${fmt(d.crit, 1)}°) katta, nur havoga chiqa olmay toʻliq orqaga qaytdi. Optik tola va olmosning yaltirashi shu hodisaga asoslangan.`, "ok"]];
+      const out = [];
+      if (ch.has("dir")) out.push([s.dir
+        ? `Endi nur ${medName(s.m).toLowerCase()}dan havoga chiqyapti: u normaldan <b>uzoqlashadi</b> (β &gt; α). Burchakni asta oshirib koʻring.`
+        : `Nur havodan ${medName(s.m).toLowerCase()}ga kiryapti: u normalga <b>yaqinlashadi</b> (β &lt; α).`]);
+      if (ch.has("m")) out.push([`${medName(s.m)}ning sindirish koʻrsatkichi n = ${fmt(s.m)}. ${s.m > p.m ? "Kattaroq" : "Kichikroq"} n boʻlgani uchun nur ${s.m > p.m ? "kuchliroq" : "kuchsizroq"} sinadi: β = ${fmt(d.b, 1)}°.` + (s.m === 2.42 ? " Olmos shuning uchun yaltiraydi." : "")]);
+      if (ch.has("a")) out.push([s.a === 0
+        ? "Nur normal boʻylab tushsa, u sinmaydi: β = 0°."
+        : `α = ${s.a}° boʻlganda β = ${fmt(d.b, 1)}°. ${s.dir ? "Havoga chiqqan nur normaldan uzoqlashdi." : "Nur normalga yaqinlashdi."}`]);
+      return out;
+    },
+    tasks:[
+      {text:"<b>Shisha</b> tanlang va nurni havodan <b>45°</b> burchak ostida tushiring. Sinish burchagi qancha chiqdi?", check:s=>s.m===1.5 && s.dir===0 && s.a===45},
+      {text:"Nurni <b>suvdan havoga</b> chiqaring va <b>toʻliq ichki qaytish</b> hosil qiling.", check:(s,d)=>s.m===1.33 && s.dir===1 && d.tir},
+      {text:"<b>Olmos</b> uchun toʻliq ichki qaytish boshlanadigan <b>eng kichik butun burchakni</b> toping.", check:(s,d)=>s.m===2.42 && s.dir===1 && d.tir && s.a===Math.ceil(d.crit)}
+    ],
+    draw(c, s, d, sim){
+      const cx = 320, cy = 200, R = 215, a = s.a * Math.PI / 180;
+      const tint = MT[s.m];
+      c.fillStyle = tint; if (s.dir) c.fillRect(0, 0, W, cy); else c.fillRect(0, cy, W, H - cy);
+      line(c, 0, cy, W, cy, C.ink, 2);
+      c.setLineDash([6, 6]); line(c, cx, 16, cx, H - 16, C.muted, 1.5); c.setLineDash([]);
+      const top = s.dir ? `${medName(s.m)} (n = ${fmt(s.m)})` : "Havo (n = 1)";
+      const bot = s.dir ? "Havo (n = 1)" : `${medName(s.m)} (n = ${fmt(s.m)})`;
+      T(c, top, 20, 30, {s:13, w:600}); T(c, bot, 20, H - 18, {s:13, w:600});
+      const sx = cx - R * Math.sin(a), sy = cy - R * Math.cos(a);
+      c.lineWidth = 3.5; c.lineCap = "round"; c.setLineDash([18, 10]); c.lineDashOffset = -(sim.t * 50);
+      c.strokeStyle = C.accent; c.beginPath(); c.moveTo(sx, sy); c.lineTo(cx, cy); c.stroke();
+      c.globalAlpha = d.tir ? 1 : .25;
+      c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx + R * Math.sin(a), cy - R * Math.cos(a)); c.stroke();
+      c.globalAlpha = 1;
+      if (!d.tir){
+        const b = d.b * Math.PI / 180;
+        c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx + R * Math.sin(b), cy + R * Math.cos(b)); c.stroke();
+      }
+      c.setLineDash([]); c.lineDashOffset = 0;
+      c.strokeStyle = C.ink; c.lineWidth = 1.5;
+      if (s.a > 0){
+        c.beginPath(); c.arc(cx, cy, 46, -Math.PI / 2 - a, -Math.PI / 2); c.stroke();
+        const m = -Math.PI / 2 - a / 2; T(c, "α", cx + 64 * Math.cos(m), cy + 64 * Math.sin(m) + 5, {a:"center", s:16, w:700});
+      }
+      if (!d.tir && d.b > 0.5){
+        const b = d.b * Math.PI / 180;
+        c.beginPath(); c.arc(cx, cy, 46, Math.PI / 2 - b, Math.PI / 2); c.stroke();
+        const m = Math.PI / 2 - b / 2; T(c, "β", cx + 64 * Math.cos(m), cy + 64 * Math.sin(m) + 5, {a:"center", s:16, w:700});
+      }
+      dot(c, cx, cy, 4, C.ink);
+      if (d.tir) T(c, "TOʻLIQ ICHKI QAYTISH", W - 20, 30, {a:"right", s:12, w:700, c:C.ok, f:DISP});
+      T(c, `α = ${s.a}°   β = ${d.tir ? "—" : fmt(d.b, 1) + "°"}`, W - 20, H - 18, {a:"right", s:13, w:600, f:MONO});
+    }
+  };
+
+  // ---------- 4. Arximed kuchi ----------
+  const MATS = [
+    {v:240,t:"Poʻkak",col:"#C9A06A",tc:"#2B1A13"},{v:520,t:"Yogʻoch",col:"#B5773F",tc:"#FFFFFF"},
+    {v:917,t:"Muz",col:"#D6ECF7",tc:"#1F3A4A"},{v:1380,t:"Plastik",col:"#9AA5B1",tc:"#1F1B18"},
+    {v:2700,t:"Alyuminiy",col:"#C6CCD2",tc:"#1F1B18"},{v:7800,t:"Temir",col:"#59616B",tc:"#FFFFFF"}];
+  const LIQS = [
+    {v:800,t:"Kerosin",abl:"kerosindan",col:"rgba(230,195,80,.33)"},{v:1000,t:"Suv",abl:"suvdan",col:"rgba(70,150,220,.28)"},
+    {v:1030,t:"Dengiz suvi",abl:"dengiz suvidan",col:"rgba(30,125,160,.33)"},{v:1260,t:"Glitserin",abl:"glitserindan",col:"rgba(175,195,235,.45)"}];
+  const mat = v => MATS.find(m => m.v === v) || MATS[0];
+  const liq = v => LIQS.find(m => m.v === v) || LIQS[1];
+  const ARCH = {
+    id:"archimedes", subject:"Fizika", sc:"phys", grade:"7-sinf", title:"Arximed kuchi",
+    goal:"Qaysi jismlar suzadi, qaysilari choʻkadi va nima uchun?",
+    controls:[
+      {id:"mat", label:"Jism materiali", type:"seg", options:MATS, value:240},
+      {id:"liq", label:"Suyuqlik", type:"seg", options:LIQS, value:1000},
+      {id:"V", label:"Jism hajmi, V", type:"range", min:100, max:1000, step:50, value:500, unit:"sm³", dec:0}
+    ],
+    calc: s => {
+      const V = s.V * 1e-6, g = 9.8, Wt = s.mat * V * g, floats = s.mat < s.liq;
+      const f = floats ? s.mat / s.liq : 1, FA = s.liq * g * V * f;
+      return { Wt, FA, floats, f };
+    },
+    readouts: (s, d) => [
+      ["Ogʻirlik, P", `${fmt(d.Wt)} N`], ["Arximed kuchi", `${fmt(d.FA)} N`, "hot"],
+      ["Botgan qism", `${fmt(d.f * 100, 0)}%`], ["Holat", d.floats ? "Suzadi" : "Choʻkadi", d.floats ? "good word" : "danger word"]
+    ],
+    formula: (s, d) => `<b>F<sub>A</sub> = ρ<sub>s</sub>·g·V<sub>b</sub></b> = ${s.liq} · 9,8 · ${fmt(s.V * d.f, 0)}·10⁻⁶ = <b>${fmt(d.FA)} N</b>`,
+    intro:["Bu <b>Arximed kuchi</b> tajribasi. Suyuqlikka botirilgan jismni suyuqlik yuqoriga itaradi.",
+           "Material, suyuqlik va hajmni oʻzgartirib, jism qachon suzishini aniqlang. Qizil strelka: ogʻirlik, yashil strelka: Arximed kuchi."],
+    explain(p, s, pd, d, ch){
+      const out = [], m = mat(s.mat), l = liq(s.liq);
+      if (ch.has("mat") || ch.has("liq")){
+        if (d.floats){
+          out.push([`${m.t} (${s.mat} kg/m³) ${l.abl} (${s.liq} kg/m³) yengil, shuning uchun suzadi. Uning ${fmt(d.f * 100, 0)}% qismi suyuqlikka botgan: bu ρ<sub>jism</sub> / ρ<sub>suyuqlik</sub> nisbatiga teng.` + (s.mat === 917 && (s.liq === 1000 || s.liq === 1030) ? " Aysbergning katta qismi suv ostida boʻlishi ham shundan." : "")]);
+        } else {
+          out.push([`${m.t} (${s.mat} kg/m³) ${l.abl} (${s.liq} kg/m³) ogʻir, shuning uchun choʻkdi. Arximed kuchi (${fmt(d.FA)} N) ogʻirlikdan (${fmt(d.Wt)} N) kichik.` + (s.mat === 917 ? " Kerosinda hatto muz ham choʻkadi!" : "")]);
+        }
+      }
+      if (ch.has("V")){
+        const k = s.V / p.V, up = k > 1;
+        out.push([`Hajm ${fmt(up ? k : 1/k)} marta ${up ? "oshdi" : "kamaydi"}: ogʻirlik ham, Arximed kuchi ham shuncha marta oʻzgardi. Jism baribir ${d.floats ? "suzadi" : "choʻkadi"}: suzish hajmga emas, <b>zichlikka</b> bogʻliq.`]);
+      }
+      return out;
+    },
+    tasks:[
+      {text:"Jismni <b>suvda</b> yarmidan koʻprogʻi botgan holda suzdiring.", check:(s,d)=>s.liq===1000 && d.floats && d.f>.5},
+      {text:"<b>Muzni kerosinga</b> soling. Nima boʻladi?", check:s=>s.mat===917 && s.liq===800},
+      {text:"Eng zich suyuqlik — <b>glitserinni</b> tanlang va unda <b>70% dan koʻprogʻi</b> botib suzadigan jismni toping.", check:(s,d)=>s.liq===1260 && d.floats && d.f>.7}
+    ],
+    draw(c, s, d, sim, dt){
+      const tx = 170, tw = 300, tb = 352, side = 50 + 60 * Math.cbrt(s.V / 1000), sub = d.floats ? d.f : 1;
+      const lvl = 200 - side * side * sub / tw * .6;
+      c.fillStyle = liq(s.liq).col; c.fillRect(tx, lvl, tw, tb - lvl);
+      line(c, tx, lvl, tx + tw, lvl, rgba(C.muted.length === 7 ? C.muted : "#5E554E", .6), 1.5);
+      const target = d.floats ? lvl - side * (1 - d.f) : tb - side;
+      if (sim.y == null) sim.y = 24;
+      sim.y = dt ? sim.y + (target - sim.y) * Math.min(1, dt * 3) : target;
+      const by = sim.y + (d.floats ? Math.sin(sim.t * 2) * 1.5 : 0), bx = 320 - side / 2, m = mat(s.mat);
+      rr(c, bx, by, side, side, 6); c.fillStyle = m.col; c.fill(); c.lineWidth = 2; c.strokeStyle = C.ink; c.stroke();
+      T(c, m.t, 320, by + side / 2 + 5, {a:"center", s:13, w:700, c:m.tc});
+      // idish
+      c.strokeStyle = C.ink; c.lineWidth = 3; c.beginPath();
+      c.moveTo(tx, 96); c.lineTo(tx, tb); c.lineTo(tx + tw, tb); c.lineTo(tx + tw, 96); c.stroke();
+      // kuchlar
+      const mx = Math.max(d.Wt, d.FA) || 1, cy = by + side / 2;
+      arrow(c, 320 - side / 2 - 18, cy, 320 - side / 2 - 18, cy + 18 + 70 * d.Wt / mx, C.warn);
+      arrow(c, 320 + side / 2 + 18, cy, 320 + side / 2 + 18, cy - (18 + 70 * d.FA / mx), C.ok);
+      T(c, `P = ${fmt(d.Wt)} N`, 488, 150, {s:13, w:700, c:C.warn, f:MONO});
+      T(c, `Fₐ = ${fmt(d.FA)} N`, 488, 172, {s:13, w:700, c:C.ok, f:MONO});
+      T(c, d.floats ? "SUZADI" : "CHOʻKADI", 488, 204, {s:13, w:700, f:DISP, c:d.floats ? C.ok : C.warn});
+      T(c, `${liq(s.liq).t} · ${s.liq} kg/m³`, tx + 10, tb - 10, {s:12, c:C.muted});
+      T(c, `${m.t} · ${s.mat} kg/m³`, 24, 34, {s:13, w:600});
+      T(c, `V = ${s.V} sm³`, 24, 54, {s:12, c:C.muted, f:MONO});
+    }
+  };
+
+  // ---------- 5. Kislota-ishqor titrlash ----------
+  const INDS = [{v:0,t:"Fenolftalein"},{v:1,t:"Metiloranj"},{v:2,t:"Universal"}];
+  function pHof(V){
+    const nA = 2.5, nB = .1 * V, vol = 25 + V;
+    if (Math.abs(nA - nB) < 1e-9) return 7;
+    if (nB < nA) return -Math.log10((nA - nB) / vol);
+    return 14 + Math.log10((nB - nA) / vol);
+  }
+  const mix = (a, b, t) => a.map((x, i) => x + (b[i] - x) * Math.max(0, Math.min(1, t)));
+  function indColor(ind, pH){
+    if (ind === 0){
+      if (pH < 8.2) return {c:[232,238,244,.55], n:"rangsiz", band:[8.2,10]};
+      const t = (pH - 8.2) / 1.8; return {c:mix([245,170,210,.6],[205,30,140,.85],t), n:t < .5 ? "och pushti" : "pushti", band:[8.2,10]};
+    }
+    if (ind === 1){
+      if (pH < 3.1) return {c:[220,50,40,.75], n:"qizil", band:[3.1,4.4]};
+      if (pH < 4.4) return {c:[240,130,40,.75], n:"toʻq sariq", band:[3.1,4.4]};
+      return {c:[245,200,40,.75], n:"sariq", band:[3.1,4.4]};
+    }
+    const hue = pH <= 7 ? Math.max(0, (pH - 1) / 6 * 120) : 120 + (pH - 7) / 7 * 160;
+    const n = pH < 3 ? "qizil" : pH < 6 ? "toʻq sariq" : pH < 8 ? "yashil" : pH < 11 ? "koʻk" : "binafsha";
+    return {hsl:`hsla(${hue},75%,50%,.75)`, n, band:null};
+  }
+  const colStr = o => o.hsl || `rgba(${o.c.map((x,i)=>i<3?Math.round(x):x).join(",")})`;
+  const TITR = {
+    id:"titration", subject:"Kimyo", sc:"chem", grade:"8-sinf", title:"Kislota va ishqor",
+    goal:"Xlorid kislotani natriy gidroksid bilan neytrallang va ekvivalent nuqtani toping.",
+    controls:[
+      {id:"V", label:"NaOH hajmi", type:"range", min:0, max:50, step:.5, value:0, unit:"ml", dec:1},
+      {id:"ind", label:"Indikator", type:"seg", options:INDS, value:0}
+    ],
+    calc: s => { const pH = pHof(s.V), ic = indColor(s.ind, pH); return { pH, col:colStr(ic), cname:ic.n, band:ic.band }; },
+    readouts: (s, d) => [
+      ["NaOH qoʻshildi", `${fmt(s.V, 1)} ml`], ["pH", fmt(d.pH), "hot"],
+      ["Muhit", d.pH < 6.99 ? "kislotali" : d.pH > 7.01 ? "ishqoriy" : "neytral", "word"], ["Eritma rangi", d.cname, "word"]
+    ],
+    formula: (s, d) => {
+      const nA = 2.5, nB = .1 * s.V;
+      const head = Math.abs(nA - nB) < 1e-9 ? `n(HCl) = n(NaOH) → <b>pH = 7</b>`
+        : nB < nA ? `[H⁺] = ${fmt((nA - nB) / (25 + s.V), 4)} mol/l → pH = −lg[H⁺] = <b>${fmt(d.pH)}</b>`
+        : `[OH⁻] = ${fmt((nB - nA) / (25 + s.V), 4)} mol/l → pH = 14 + lg[OH⁻] = <b>${fmt(d.pH)}</b>`;
+      return head + `<small>HCl + NaOH → NaCl + H₂O · kolbada 25 ml 0,1 M HCl</small>`;
+    },
+    intro:["Bu <b>titrlash</b> tajribasi. Kolbada 25 ml xlorid kislota (HCl) bor, byuretkada natriy gidroksid (NaOH).",
+           "NaOH ni oz-ozdan qoʻshing va indikator rangini kuzating. Oʻngdagi grafik pH qanday oʻzgarishini koʻrsatadi."],
+    explain(p, s, pd, d, ch){
+      const out = [];
+      if (ch.has("V")){
+        const cross = (p.V < 25 && s.V >= 25) || (p.V > 25 && s.V <= 25);
+        if (Math.abs(d.pH - pd.pH) > 2.5) out.push([`Atigi ${fmt(Math.abs(s.V - p.V), 1)} ml da pH ${fmt(pd.pH)} dan ${fmt(d.pH)} ga sakradi. <b>Ekvivalent nuqta</b> atrofida pH juda keskin oʻzgaradi.`]);
+        else out.push([`pH ${fmt(pd.pH)} → ${fmt(d.pH)}. ${d.pH < 6.99 ? "Eritmada hali kislota ortiqcha." : d.pH > 7.01 ? "Endi ishqor ortiqcha." : "Eritma neytral."}`]);
+        if (cross && s.V >= 25) out.push(["25 ml NaOH 25 ml HCl ni toʻliq neytrallaydi: HCl + NaOH → NaCl + H₂O. Kolbada osh tuzi eritmasi qoldi.", "ok"]);
+        if (pd.cname !== d.cname) out.push([`Indikator rangi oʻzgardi: ${pd.cname} → <b>${d.cname}</b>.`]);
+      }
+      if (ch.has("ind")){
+        const info = ["Fenolftalein kislotali va neytral muhitda rangsiz, pH 8,2 dan yuqorida pushti boʻladi.",
+                      "Metiloranj pH 3,1 dan past qizil, 3,1–4,4 da toʻq sariq, 4,4 dan yuqorida sariq.",
+                      "Universal indikator pH ga qarab qizildan (kislotali) yashil (neytral) orqali binafsharanggacha (ishqoriy) oʻzgaradi."];
+        out.push([info[s.ind] + ` Hozirgi rang: <b>${d.cname}</b>.`]);
+      }
+      return out;
+    },
+    tasks:[
+      {text:"<b>Fenolftalein</b> bilan kolba <b>endigina pushti</b> rangga kirguncha NaOH qoʻshing.", check:(s,d)=>s.ind===0 && s.V>=25 && s.V<=26},
+      {text:"<b>Metiloranjni</b> tanlang va eritmani <b>sariq</b> qiling, lekin ortiqcha ishqor qoʻshmang (V ≤ 25 ml).", check:(s,d)=>s.ind===1 && d.cname==="sariq" && s.V<=25},
+      {text:"<b>Universal indikator</b> bilan pH ni <b>12</b> dan oshiring. Eritma qanday rangga kirdi?", check:(s,d)=>s.ind===2 && d.pH>12}
+    ],
+    actions:[
+      {label:"+1 tomchi (0,5 ml)", run:s=>{ s.V = Math.min(50, s.V + .5); }},
+      {label:"Kolbani yangilash", run:s=>{ s.V = 0; }}
+    ],
+    onUpdate(sim, s){
+      if (sim.lastV == null){ sim.lastV = s.V; return; }
+      if (s.V > sim.lastV){
+        const n = Math.min(6, Math.max(1, Math.round((s.V - sim.lastV) / .5)));
+        sim.drops = sim.drops || [];
+        for (let i = 0; i < n; i++) sim.drops.push({y: 240 - i * 22});
+      }
+      sim.lastV = s.V;
+    },
+    draw(c, s, d, sim, dt){
+      const bx = 150, tTop = 22, tBot = 206, tw = 24, span = tBot - tTop - 16;
+      const lvlY = tTop + 8 + (s.V / 50) * span;
+      c.fillStyle = "rgba(120,160,220,.35)"; c.fillRect(bx - tw / 2, lvlY, tw, tBot - lvlY);
+      c.strokeStyle = C.ink; c.lineWidth = 2; c.strokeRect(bx - tw / 2, tTop, tw, tBot - tTop);
+      for (let v = 0; v <= 50; v += 5){
+        const y = tTop + 8 + v / 50 * span;
+        line(c, bx - tw / 2, y, bx - tw / 2 + (v % 10 ? 6 : 11), y, C.ink, 1);
+        if (v % 10 === 0) T(c, String(v), bx - tw / 2 - 6, y + 4, {a:"right", s:10, c:C.muted, f:MONO});
+      }
+      c.fillStyle = C.ink; c.fillRect(bx - 16, tBot, 32, 8); line(c, bx, tBot + 8, bx, tBot + 30, C.ink, 3);
+      T(c, "NaOH, 0,1 M", bx + 20, tTop + 14, {s:12, w:600});
+      // tomchilar
+      const surf = 322 - s.V * .3;
+      if (sim.drops && dt){
+        sim.drops.forEach(dr => dr.y += 320 * dt);
+        sim.drops = sim.drops.filter(dr => dr.y < surf);
+        sim.drops.forEach(dr => { if (dr.y > tBot + 30) dot(c, bx, dr.y, 3.5, "rgba(120,160,220,.9)"); });
+      }
+      // kolba
+      const fx = 150, path = () => { c.beginPath(); c.moveTo(fx - 12, 248); c.lineTo(fx + 12, 248); c.lineTo(fx + 12, 280);
+        c.lineTo(fx + 62, 352); c.lineTo(fx - 62, 352); c.lineTo(fx - 12, 280); c.closePath(); };
+      c.save(); path(); c.clip(); c.fillStyle = d.col; c.fillRect(fx - 70, surf, 140, 360 - surf); c.restore();
+      path(); c.strokeStyle = C.ink; c.lineWidth = 2.5; c.lineJoin = "round"; c.stroke();
+      T(c, "HCl, 25 ml", fx, 372, {a:"center", s:11, c:C.muted});
+      // grafik
+      const gx0 = 350, gx1 = 616, gy0 = 44, gy1 = 316, X = v => gx0 + v / 50 * (gx1 - gx0), Y = p => gy1 - p / 14 * (gy1 - gy0);
+      if (d.band){ c.fillStyle = rgba(C.accent, .1); c.fillRect(gx0, Y(d.band[1]), gx1 - gx0, Y(d.band[0]) - Y(d.band[1])); }
+      line(c, gx0, gy0, gx0, gy1, C.muted, 1.5); line(c, gx0, gy1, gx1, gy1, C.muted, 1.5);
+      [0, 7, 14].forEach(p => { T(c, String(p), gx0 - 8, Y(p) + 4, {a:"right", s:11, c:C.muted, f:MONO}); if (p) line(c, gx0, Y(p), gx1, Y(p), rgba(C.accent, .08), 1); });
+      [0, 25, 50].forEach(v => T(c, String(v), X(v), gy1 + 16, {a:"center", s:11, c:C.muted, f:MONO}));
+      c.setLineDash([5, 5]); line(c, X(25), gy0, X(25), gy1, C.muted, 1); c.setLineDash([]);
+      T(c, "ekv. nuqta", X(25) + 6, gy0 + 12, {s:11, c:C.muted});
+      c.strokeStyle = rgba(C.accent, .5); c.lineWidth = 2; c.beginPath();
+      for (let v = 0; v <= 50; v += .25){ const x = X(v), y = Y(pHof(v)); v ? c.lineTo(x, y) : c.moveTo(x, y); }
+      c.stroke();
+      dot(c, X(s.V), Y(d.pH), 7, C.surface); dot(c, X(s.V), Y(d.pH), 5, C.accent);
+      T(c, "pH", gx0 - 8, gy0 - 10, {a:"right", s:12, w:700});
+      T(c, "V(NaOH), ml", gx1, gy1 + 34, {a:"right", s:11, c:C.muted});
+      T(c, "Titrlash egri chizigʻi", gx0 + 8, gy0 - 14, {s:12, w:600});
+    }
+  };
+
+  // ---------- 6. Fotosintez ----------
+  const tf = Tc => { let f = Math.exp(-Math.pow((Tc - 27) / 12, 2)); if (Tc > 35) f *= Math.max(0, 1 - (Tc - 35) / 10); return f; };
+  const PHOTO = {
+    id:"photosynthesis", subject:"Biologiya", sc:"bio", grade:"6-sinf", title:"Fotosintez",
+    goal:"Yorugʻlik, harorat va CO₂ suv oʻsimligining kislorod ajratishiga qanday ta’sir qiladi?",
+    controls:[
+      {id:"light", label:"Yorugʻlik", type:"range", min:0, max:100, step:5, value:40, unit:"%", dec:0},
+      {id:"T", label:"Suv harorati", type:"range", min:5, max:50, step:1, value:20, unit:"°C", dec:0},
+      {id:"co2", label:"CO₂", type:"seg", options:[{v:1,t:"Oddiy suv"},{v:1.6,t:"NaHCO₃ qoʻshilgan"}], value:1}
+    ],
+    calc: s => {
+      const rate = 60 * s.co2 * s.light / (s.light + 30) * tf(s.T);
+      const lim = s.T > 35 ? "harorat (issiq)" : s.T < 15 ? "harorat (sovuq)" : s.light < 50 ? "yorugʻlik" : s.co2 < 1.5 ? "CO₂" : "yoʻq";
+      return { rate, lim };
+    },
+    readouts: (s, d) => [
+      ["Yorugʻlik", `${s.light}%`], ["Harorat", `${s.T} °C`],
+      ["O₂ pufakchalari", `${fmt(d.rate, 0)}/min`, "hot"], ["Cheklovchi omil", d.lim, "word"]
+    ],
+    formula: (s, d) => `<b>6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂</b><small>yorugʻlik energiyasi hisobiga · tezlik ≈ ${fmt(d.rate, 0)} pufakcha/min</small>`,
+    intro:["Bu <b>fotosintez</b> tajribasi. Suv oʻsimligi (elodeya) yorugʻlikda kislorod ajratadi, u pufakcha boʻlib koʻtariladi.",
+           "Pufakchalar qancha koʻp boʻlsa, fotosintez shuncha tez boradi. Yorugʻlik, harorat va CO₂ ni oʻzgartiring."],
+    explain(p, s, pd, d, ch){
+      const out = [];
+      if (ch.has("light")){
+        if (s.light === 0) out.push(["Yorugʻlik yoʻq: fotosintez toʻxtadi. Qorongʻida oʻsimlik faqat nafas oladi."]);
+        else {
+          out.push([`Yorugʻlik ${s.light > p.light ? "oshdi" : "kamaydi"}: ${fmt(pd.rate, 0)} → ${fmt(d.rate, 0)} pufakcha/min. Pufakchalardagi gaz kislorod (O₂).`]);
+          if (s.light > p.light && s.light >= 70 && d.rate - pd.rate < 3) out.push(["Yorugʻlik yetarli, tezlik deyarli oshmayapti. Endi uni boshqa omil cheklayapti."]);
+        }
+      }
+      if (ch.has("T")){
+        if (s.T > 35) out.push([`<b>${s.T} °C juda issiq!</b> Fotosintez fermentlari buzila boshlaydi (denaturatsiya), tezlik keskin tushdi: ${fmt(d.rate, 0)} pufakcha/min.`, "warn"]);
+        else if (s.T < 12) out.push([`${s.T} °C sovuq: fermentlar sekin ishlaydi, tezlik ${fmt(d.rate, 0)} pufakcha/min.`]);
+        else out.push([`Harorat ${s.T} °C: ${fmt(d.rate, 0)} pufakcha/min. Optimal harorat taxminan 25–30 °C.`]);
+      }
+      if (ch.has("co2")) out.push([s.co2 > 1
+        ? "NaHCO₃ (ichimlik sodasi) suvga CO₂ beradi. CO₂ fotosintez uchun xomashyo, shuning uchun tezlik oshdi."
+        : "Qoʻshimcha CO₂ olib tashlandi, tezlik pasaydi."]);
+      return out;
+    },
+    tasks:[
+      {text:"Pufakchalar sonini daqiqasiga <b>30 tadan</b> oshiring.", check:(s,d)=>d.rate>30},
+      {text:"Haroratni shunday oshiringki, fotosintez <b>deyarli toʻxtasin</b> (5 tadan kam).", check:(s,d)=>s.T>35 && d.rate<5},
+      {text:"Eng yuqori natijaga erishing: daqiqasiga <b>70 tadan koʻp</b> pufakcha.", check:(s,d)=>d.rate>70}
+    ],
+    draw(c, s, d, sim, dt){
+      const L = s.light / 100, lx = 92, ly = 150;
+      if (L > 0){
+        const g = c.createRadialGradient(lx + 26, ly, 6, lx + 26, ly, 40 + 90 * L);
+        g.addColorStop(0, rgba(C.glow, .8 * L)); g.addColorStop(1, rgba(C.glow, 0));
+        c.fillStyle = g; c.beginPath(); c.arc(lx + 26, ly, 40 + 90 * L, 0, Math.PI * 2); c.fill();
+        c.setLineDash([8, 8]); c.lineDashOffset = -(sim.t * 30);
+        for (let i = -2; i <= 2; i++) line(c, lx + 44, ly + i * 12, 246, ly + i * 38, rgba(C.glow, .55 * L), 2);
+        c.setLineDash([]); c.lineDashOffset = 0;
+      }
+      line(c, lx - 18, ly + 26, lx - 18, 346, C.ink, 4); c.fillStyle = C.ink; c.fillRect(lx - 48, 344, 60, 8);
+      rr(c, lx - 42, ly - 26, 44, 52, 8); c.fill();
+      c.beginPath(); c.moveTo(lx, ly - 26); c.lineTo(lx + 26, ly - 40); c.lineTo(lx + 26, ly + 40); c.lineTo(lx, ly + 26); c.closePath(); c.fill();
+      dot(c, lx + 26, ly, 13, rgba(C.glow, .2 + .8 * L));
+      // stakan
+      c.fillStyle = "rgba(90,160,210,.16)"; c.fillRect(252, 132, 196, 216);
+      // oʻsimlik
+      if (!sim.plant){
+        sim.plant = [0,1,2,3,4].map(i => ({x:290 + i * 30, h:120 + ((i * 37) % 60), ph:i * 1.3}));
+        sim.bub = []; sim.acc = 0; sim.count = 0;
+      }
+      const tips = [];
+      sim.plant.forEach(st => {
+        const sway = Math.sin(sim.t * 1.2 + st.ph) * 6, topY = 346 - st.h, tx = st.x + sway;
+        c.strokeStyle = "#3E9B5A"; c.lineWidth = 3; c.beginPath(); c.moveTo(st.x, 346);
+        c.quadraticCurveTo(st.x - 8, 346 - st.h / 2, tx, topY); c.stroke();
+        for (let k = 1; k <= 5; k++){
+          const t = k / 6, x = st.x + (tx - st.x) * t - 8 * 2 * t * (1 - t), y = 346 - st.h * t, side = k % 2 ? 1 : -1;
+          c.fillStyle = "#4DAF68"; c.beginPath(); c.ellipse(x + side * 9, y, 10, 4, side * .5, 0, Math.PI * 2); c.fill();
+        }
+        tips.push([tx, topY]);
+      });
+      if (dt){
+        sim.acc += d.rate / 60 * dt * 3;
+        while (sim.acc >= 1){ sim.acc -= 1; const tp = tips[Math.floor(Math.random() * tips.length)];
+          sim.bub.push({x:tp[0] + Math.random() * 8 - 4, y:tp[1], r:2 + Math.random() * 2.5, ph:Math.random() * 6}); sim.count++; }
+        sim.bub.forEach(b => { b.y -= 70 * dt; });
+        sim.bub = sim.bub.filter(b => b.y > 136);
+      }
+      c.lineWidth = 1.5; c.strokeStyle = rgba(C.ink.length === 7 ? C.ink : "#201B18", .7);
+      sim.bub.forEach(b => { c.beginPath(); c.arc(b.x + Math.sin(b.y / 12 + b.ph) * 2, b.y, b.r, 0, Math.PI * 2); c.stroke(); });
+      c.strokeStyle = C.ink; c.lineWidth = 2.5; c.beginPath();
+      c.moveTo(250, 104); c.lineTo(250, 350); c.lineTo(450, 350); c.lineTo(450, 104); c.stroke();
+      if (s.co2 > 1) T(c, "+ NaHCO₃", 350, 372, {a:"center", s:12, w:600, c:C.muted});
+      // termometr
+      const th = Math.max(0, Math.min(1, s.T / 55)) * 250;
+      rr(c, 532, 60, 16, 280, 8); c.fillStyle = C.surface; c.fill(); c.lineWidth = 2; c.strokeStyle = C.ink; c.stroke();
+      c.fillStyle = C.warn; c.fillRect(536, 334 - th, 8, th + 6); dot(c, 540, 346, 13, C.warn);
+      [10, 20, 30, 40, 50].forEach(v => { const y = 334 - v / 55 * 250; line(c, 548, y, 556, y, C.ink, 1); T(c, String(v), 560, y + 4, {s:10, c:C.muted, f:MONO}); });
+      T(c, `${s.T} °C`, 540, 48, {a:"center", s:13, w:700, f:MONO});
+      T(c, `O₂ pufakchalari: ${sim.count || 0}`, 24, 34, {s:13, w:600});
+      T(c, `${fmt(d.rate, 0)} ta/min`, 24, 54, {s:12, c:C.muted, f:MONO});
+    }
+  };
+
+  const LABS = [OHM, PEND, REFR, ARCH, TITR, PHOTO];
+
+  // =================================================================
+  // BOSHQARUV
+  // =================================================================
+  const shelfEl = $("shelf"), tabsEl = $("labTabs"), ctlEl = $("controls"), roEl = $("readouts"),
+        chat = $("chat"), taskEl = $("task"), actEl = $("actions"), canvas = $("stage"), ctx = canvas.getContext("2d");
+  let lab = LABS[0], s = {}, sim = {}, prev = {}, taskIdx = 0, d = {};
+  let progress = {};
+  try { progress = JSON.parse(localStorage.getItem("virtulab-progress") || "{}") || {}; } catch(e){ progress = {}; }
+  const save = () => { try { localStorage.setItem("virtulab-progress", JSON.stringify(progress)); } catch(e){} };
+  const svg = (l, cls) => `<svg viewBox="0 0 24 24" aria-hidden="true" class="${cls}">${ICONS[l.id]}</svg>`;
+
+  shelfEl.innerHTML = LABS.map(l => `<button class="tile" type="button" data-lab="${l.id}">${svg(l, "ic-" + l.sc)}<small>${l.subject} · ${l.grade}</small><b>${l.title}</b></button>`).join("");
+  tabsEl.innerHTML = LABS.map(l => `<button class="lab-tab" type="button" role="tab" id="tab-${l.id}" data-lab="${l.id}" aria-selected="false">${svg(l, "")}<span><small>${l.subject} · ${l.grade}</small><b>${l.title}</b></span><i></i></button>`).join("");
+  tabsEl.querySelectorAll("svg").forEach((el, i) => el.style.color = `var(--${LABS[i].sc})`);
+  shelfEl.addEventListener("click", e => {
+    const b = e.target.closest("[data-lab]"); if (!b) return;
+    selectLab(b.dataset.lab, true);
+    $("lab").scrollIntoView({behavior: reduce ? "auto" : "smooth"});
+  });
+  tabsEl.addEventListener("click", e => { const b = e.target.closest("[data-lab]"); if (b) selectLab(b.dataset.lab, true); });
+
+  function refreshTabs(){
+    LABS.forEach(l => {
+      const t = $("tab-" + l.id), n = Math.min(progress[l.id] || 0, l.tasks.length), i = t.querySelector("i");
+      t.setAttribute("aria-selected", l === lab ? "true" : "false");
+      i.textContent = n === l.tasks.length ? `✓ ${n}/${n}` : `${n}/${l.tasks.length}`;
+      i.className = n === l.tasks.length ? "done" : "";
+    });
+    const cur = $("tab-" + lab.id);
+    if (cur && cur.scrollIntoView && tabsEl.scrollWidth > tabsEl.clientWidth){
+      tabsEl.scrollTo({left: cur.offsetLeft - tabsEl.offsetLeft - 16, behavior: reduce ? "auto" : "smooth"});
+    }
+  }
 
   function say(html, cls){
-    const d = document.createElement("div");
-    d.className = "msg" + (cls ? " " + cls : "");
-    d.innerHTML = html;
-    chat.appendChild(d);
-    while (chat.children.length > 8) chat.removeChild(chat.firstChild);
+    const el = document.createElement("div");
+    el.className = "msg" + (cls ? " " + cls : "");
+    el.innerHTML = html;
+    chat.appendChild(el);
+    while (chat.children.length > 10) chat.removeChild(chat.firstChild);
     chat.scrollTop = chat.scrollHeight;
   }
-  function showTask(){
-    const t = $("task");
-    if (taskIdx >= tasks.length){
-      t.classList.add("done");
-      t.innerHTML = '<span>🏆</span><div><b>Barcha topshiriqlar bajarildi!</b> Siz Om qonunini amalda qoʻlladingiz.</div>';
-      return;
-    }
-    t.classList.remove("done");
-    t.innerHTML = '<span>🎯</span><div><b>Topshiriq ' + (taskIdx+1) + '/4.</b> ' + tasks[taskIdx].text + '</div>';
+
+  const valText = (c, v) => c.type === "seg" ? (c.options.find(o => o.v === v) || {t:v}).t : `${fmt(v, c.dec ?? 2)} ${c.unit}`;
+
+  function buildControls(){
+    ctlEl.innerHTML = "";
+    lab.controls.forEach(c => {
+      const row = document.createElement("div");
+      if (c.type === "range"){
+        row.className = "ctl";
+        row.innerHTML = `<label for="c-${c.id}">${c.label}</label><input type="range" id="c-${c.id}" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.value}"><span class="val" id="v-${c.id}"></span>`;
+        const inp = row.querySelector("input");
+        inp.addEventListener("input", () => { s[c.id] = +inp.value; update(); });
+        inp.addEventListener("change", () => { s[c.id] = +inp.value; update(); react(); });
+      } else {
+        row.className = "ctl seg-row";
+        row.innerHTML = `<span class="lbl" id="l-${c.id}">${c.label}</span><div class="seg" id="s-${c.id}" role="group" aria-labelledby="l-${c.id}">${c.options.map(o => `<button type="button" data-v="${o.v}">${o.t}</button>`).join("")}</div>`;
+        row.querySelector(".seg").addEventListener("click", e => {
+          const b = e.target.closest("button"); if (!b) return;
+          s[c.id] = +b.dataset.v; update(); react();
+        });
+      }
+      ctlEl.appendChild(row);
+    });
+  }
+  function syncControls(){
+    lab.controls.forEach(c => {
+      if (c.type === "range"){
+        const i = $("c-" + c.id); if (+i.value !== s[c.id]) i.value = s[c.id];
+        $("v-" + c.id).textContent = valText(c, s[c.id]);
+      } else {
+        $("s-" + c.id).querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", +b.dataset.v === s[c.id] ? "true" : "false"));
+      }
+    });
+  }
+  function buildActions(){
+    actEl.innerHTML = "";
+    (lab.actions || []).forEach(a => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "btn btn-sm btn-line"; b.textContent = a.label;
+      b.addEventListener("click", () => { a.run(s, sim); update(); if (!a.silent) react(); });
+      actEl.appendChild(b);
+    });
+    const r = document.createElement("button");
+    r.type = "button"; r.className = "btn btn-sm btn-line"; r.textContent = "Boshidan boshlash";
+    r.addEventListener("click", () => {
+      lab.controls.forEach(c => s[c.id] = c.value);
+      sim = {t:0}; prev = {...s}; chat.innerHTML = ""; lab.intro.forEach(m => say(m)); update();
+    });
+    actEl.appendChild(r);
   }
 
-  // electrons
-  const wire = $("wire"), eg = $("electrons");
-  const L = wire.getTotalLength(), N = 18, dots = [];
-  for (let i=0;i<N;i++){
-    const c = document.createElementNS("http://www.w3.org/2000/svg","circle");
-    c.setAttribute("r","4"); c.setAttribute("fill","var(--accent)");
-    eg.appendChild(c); dots.push(c);
-  }
-  let offset = 0, last = performance.now();
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  function place(){
-    for (let i=0;i<N;i++){
-      const p = wire.getPointAtLength(((offset + i*L/N) % L + L) % L);
-      dots[i].setAttribute("cx", p.x); dots[i].setAttribute("cy", p.y);
-    }
-  }
-  function tick(now){
-    const dt = Math.min(0.05, (now-last)/1000); last = now;
-    const I = current();
-    if (!burnt) offset += I * 22 * dt;
-    place();
-    requestAnimationFrame(tick);
-  }
-  function current(){ return (+sU.value) / (+sR.value); }
-
-  function render(){
-    const U = +sU.value, R = +sR.value, I = U/R;
-    burnt = I > MAX_I;
-    $("vU").textContent = $("oU").textContent = $("lblU").textContent = U + " V";
-    $("vR").textContent = $("oR").textContent = $("lblR").textContent = R + " Ω";
-    $("oI").textContent = $("lblI").textContent = fmt(I) + " A";
-    $("formula").innerHTML = "<b>I = U / R</b> = " + U + " V / " + R + " Ω = <b>" + fmt(I) + " A</b>";
-    $("roI").classList.toggle("danger", burnt);
-    const b = burnt ? 0 : Math.min(1, I / MAX_I);
-    $("bulb").setAttribute("opacity", burnt ? 0.08 : (0.15 + b*0.85).toFixed(2));
-    $("halo").setAttribute("opacity", burnt ? 0 : (b*0.55).toFixed(2));
-    $("halo").setAttribute("r", 34 + b*40);
-    $("filament").setAttribute("stroke", burnt ? "var(--warn)" : "var(--ink)");
-    $("lblLamp").textContent = burnt ? "lampochka kuydi" : "lampochka";
-    $("lblLamp").setAttribute("fill", burnt ? "var(--warn)" : "var(--muted)");
-    if (reduce) place();
+  function update(){
+    d = lab.calc(s);
+    syncControls();
+    roEl.innerHTML = lab.readouts(s, d).map(([l, v, cls]) => `<div class="ro ${cls || ""}"><label>${l}</label><output>${v}</output></div>`).join("");
+    $("formula").innerHTML = lab.formula(s, d);
+    if (lab.onUpdate) lab.onUpdate(sim, s, d);
   }
 
   function react(){
-    const U = +sU.value, R = +sR.value, I = U/R;
-    if (U === prev.U && R === prev.R) return;
-    const pI = prev.U/prev.R;
-    say((U!==prev.U && R!==prev.R) ? "U = " + U + " V, R = " + R + " Ω qildim" : (U!==prev.U ? "Kuchlanishni " + U + " V qildim" : "Qarshilikni " + R + " Ω qildim"), "me");
-    if (I > MAX_I){
-      say("<b>Diqqat!</b> Tok kuchi " + fmt(I) + " A boʻldi, lampochka esa koʻpi bilan " + MAX_I + " A ga chidaydi. U kuyib qoldi. Haqiqiy laboratoriyada bu xavfli boʻlardi, bu yerda esa xavfsiz. Qarshilikni oshiring yoki kuchlanishni kamaytiring.", "warn");
-    } else if (prev.U/prev.R > MAX_I) {
-      say("Zanjir yana xavfsiz: I = " + fmt(I) + " A. Lampochkani yangisiga almashtirdik.", "ok");
-    } else if (U === prev.U){
-      const k = R / prev.R;
-      if (k > 1){
-        say("Qarshilik " + fmt(k) + " marta oshdi, shuning uchun tok " + fmt(k) + " marta kamaydi: " + fmt(pI) + " A → " + fmt(I) + " A. Kuchlanish oʻzgarmasa, tok qarshilikka <b>teskari proporsional</b>.");
-      } else {
-        say("Qarshilik " + fmt(1/k) + " marta kamaydi, tok esa " + fmt(1/k) + " marta oshdi: " + fmt(pI) + " A → " + fmt(I) + " A. Lampochka yorqinroq yondi, chunki undan koʻproq zaryad oqib oʻtmoqda.");
-      }
-    } else if (R === prev.R){
-      say("Kuchlanish " + (U>prev.U ? "oshdi" : "kamaydi") + ", tok ham " + (U>prev.U ? "oshdi" : "kamaydi") + ": " + fmt(pI) + " A → " + fmt(I) + " A. Qarshilik oʻzgarmasa, tok kuchlanishga <b>toʻgʻri proporsional</b>.");
-    }
-    prev = {U, R};
-    if (taskIdx < tasks.length && Math.abs(I - tasks[taskIdx].target) < 1e-9){
-      say("✅ Toʻgʻri! " + U + " V / " + R + " Ω = " + fmt(I) + " A. Topshiriq bajarildi.", "ok");
-      taskIdx++; showTask();
-    }
-    render();
+    const changed = lab.controls.filter(c => s[c.id] !== prev[c.id]);
+    if (!changed.length) return;
+    say(changed.map(c => `${c.label}: ${valText(c, s[c.id])}`).join(", "), "me");
+    const pd = lab.calc(prev);
+    lab.explain(prev, s, pd, d, new Set(changed.map(c => c.id))).forEach(([m, k]) => say(m, k));
+    prev = {...s};
+    checkTask();
   }
 
-  sU.addEventListener("input", render);
-  sR.addEventListener("input", render);
-  sU.addEventListener("change", react);
-  sR.addEventListener("change", react);
-  $("btnShort").addEventListener("click", () => { sU.value = 12; sR.value = 1; render(); react(); });
-  $("btnReset").addEventListener("click", () => {
-    sU.value = 6; sR.value = 3; prev = {U:6, R:3}; taskIdx = 0;
-    chat.innerHTML = ""; intro(); showTask(); render();
-  });
-  function intro(){
-    say("Salom! Bu <b>Om qonuni</b> tajribasi. Zanjirda U = 6 V, R = 3 Ω, demak I = U / R = 2 A.");
-    say("Slayderlarni suring, men har bir oʻzgarishni tushuntirib beraman.");
+  function checkTask(){
+    if (taskIdx >= lab.tasks.length) return;
+    if (lab.tasks[taskIdx].check(s, d, sim)){
+      taskIdx++;
+      progress[lab.id] = Math.max(progress[lab.id] || 0, taskIdx); save();
+      say(taskIdx >= lab.tasks.length ? "✅ <b>Barakalla!</b> Bu laboratoriyadagi barcha topshiriqlar bajarildi." : "✅ <b>Toʻgʻri!</b> Topshiriq bajarildi. Keyingisiga oʻtamiz.", "ok");
+      showTask(); refreshTabs();
+    }
   }
 
-  intro(); showTask(); render(); place();
+  function showTask(){
+    const n = lab.tasks.length;
+    if (taskIdx >= n){
+      taskEl.className = "task done";
+      taskEl.innerHTML = `<b>Barcha ${n} ta topshiriq bajarildi!</b> Boshqa laboratoriyani tanlang yoki <button type="button" class="linkbtn" id="again">topshiriqlarni qaytadan bajaring</button>.`;
+      $("again").addEventListener("click", () => { progress[lab.id] = 0; save(); taskIdx = 0; showTask(); refreshTabs(); });
+      return;
+    }
+    taskEl.className = "task";
+    taskEl.innerHTML = `<b>Topshiriq ${taskIdx + 1}/${n}.</b> ${lab.tasks[taskIdx].text}`;
+  }
 
-  // --- Ilova (PWA): oʻrnatish va oflayn rejim ---
+  function selectLab(id, user){
+    lab = LABS.find(l => l.id === id) || LABS[0];
+    s = {}; lab.controls.forEach(c => s[c.id] = c.value);
+    sim = {t:0}; prev = {...s};
+    taskIdx = Math.min(progress[lab.id] || 0, lab.tasks.length);
+    const subj = $("labSubj"); subj.textContent = `${lab.subject} · ${lab.grade}`; subj.style.color = `var(--${lab.sc})`;
+    $("labTitle").textContent = lab.title; $("labGoal").textContent = lab.goal;
+    canvas.setAttribute("aria-label", `${lab.title} tajribasi`);
+    buildControls(); buildActions();
+    chat.innerHTML = ""; lab.intro.forEach(m => say(m));
+    update(); showTask(); refreshTabs();
+    if (user){ try { history.replaceState(null, "", "#" + lab.id); } catch(e){} }
+  }
+
+  // ---------- chizish sikli ----------
+  let last = performance.now();
+  function frame(now){
+    const dt = reduce ? 0 : Math.min(.05, (now - last) / 1000); last = now;
+    const cw = canvas.clientWidth;
+    if (cw > 0){
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      const tw = Math.round(cw * dpr), th = Math.round(cw * H / W * dpr);
+      if (canvas.width !== tw || canvas.height !== th){ canvas.width = tw; canvas.height = th; }
+      const k = canvas.width / W;
+      ctx.setTransform(k, 0, 0, k, 0, 0); ctx.clearRect(0, 0, W, H);
+      sim.t = (sim.t || 0) + dt;
+      ctx.save(); try { lab.draw(ctx, s, d, sim, dt); } catch(err){ console.error(err); } ctx.restore();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const fromHash = LABS.find(l => "#" + l.id === location.hash);
+  selectLab(fromHash ? fromHash.id : LABS[0].id, false);
+  if (fromHash) setTimeout(() => $("lab").scrollIntoView(), 50);
+  requestAnimationFrame(frame);
+
+  // =================================================================
+  // ILOVA (PWA): oʻrnatish va oflayn rejim
+  // =================================================================
   const btnI = $("btnInstall");
   const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   let deferred = null;
   function toast(html){
     const old = document.querySelector(".toast"); if (old) old.remove();
-    const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role","status");
+    const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status");
     t.innerHTML = html + '<button type="button" aria-label="Yopish">×</button>';
     t.querySelector("button").onclick = () => t.remove();
     document.body.appendChild(t);
   }
-  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; btnI.hidden = false; });
-  window.addEventListener("appinstalled", () => { btnI.hidden = true; deferred = null; toast("✅ VirtuLab UZ oʻrnatildi. Uni bosh ekrandan ochishingiz mumkin."); });
-  if (isIOS && !standalone) btnI.hidden = false;
-  btnI.addEventListener("click", async () => {
-    if (deferred){ deferred.prompt(); await deferred.userChoice.catch(()=>{}); deferred = null; btnI.hidden = true; return; }
-    toast("<b>iPhone/iPad'ga oʻrnatish:</b> Safari'da pastdagi <b>Ulashish</b> tugmasini bosing, soʻng <b>“Bosh ekranga qoʻshish”</b> ni tanlang.");
-  });
+  if (btnI){
+    window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; btnI.hidden = false; });
+    window.addEventListener("appinstalled", () => { btnI.hidden = true; deferred = null; toast("✅ VirtuLab UZ oʻrnatildi. Uni bosh ekrandan ochishingiz mumkin."); });
+    if (isIOS && !standalone) btnI.hidden = false;
+    btnI.addEventListener("click", async () => {
+      if (deferred){ deferred.prompt(); try { await deferred.userChoice; } catch(e){} deferred = null; btnI.hidden = true; return; }
+      toast("<b>iPhone/iPad'ga oʻrnatish:</b> Safari'da pastdagi <b>Ulashish</b> tugmasini bosing, soʻng <b>“Bosh ekranga qoʻshish”</b> ni tanlang.");
+    });
+  }
   function netState(){
     const b = document.querySelector(".brand"); let tag = b.querySelector(".offline");
     if (!navigator.onLine && !tag){ tag = document.createElement("span"); tag.className = "offline"; tag.textContent = "oflayn"; b.appendChild(tag); }
     if (navigator.onLine && tag) tag.remove();
   }
   addEventListener("online", netState); addEventListener("offline", netState); netState();
-  if ("serviceWorker" in navigator && location.protocol !== "file:"){
-    addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(()=>{}));
+  if ("serviceWorker" in navigator && location.protocol.startsWith("http") && document.querySelector('link[rel="manifest"]')){
+    addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
   }
-  if (!reduce) requestAnimationFrame(tick);
 })();
 </script>
 
